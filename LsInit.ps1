@@ -1,7 +1,3 @@
-# 強制設定輸出編碼為 UTF-8，解決中文亂碼問題
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-$OutputEncoding = [System.Text.Encoding]::UTF8
-
 # 定義專案名稱（預設為 Project，也可執行時修改）
 $projectName = "NewProject"
 if (-not (Test-Path $projectName)) { New-Item -ItemType Directory -Path $projectName }

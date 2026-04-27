@@ -1,34 +1,34 @@
-# å¼·åˆ¶è¨­å®šè¼¸å‡ºç·¨ç¢¼ç‚º UTF-8ï¼Œè§£æ±ºä¸­æ–‡äº‚ç¢¼å•é¡Œ
+# ±j¨î³]©w¿é¥X½s½X¬° UTF-8¡A¸Ñ¨M¤¤¤å¶Ã½X°İÃD
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $OutputEncoding = [System.Text.Encoding]::UTF8
 
-# å®šç¾©å°ˆæ¡ˆåç¨±ï¼ˆé è¨­ç‚º Projectï¼Œä¹Ÿå¯åŸ·è¡Œæ™‚ä¿®æ”¹ï¼‰
+# ©w¸q±M®×¦WºÙ¡]¹w³]¬° Project¡A¤]¥i°õ¦æ®É­×§ï¡^
 $projectName = "NewProject"
 if (-not (Test-Path $projectName)) { New-Item -ItemType Directory -Path $projectName }
 cd $projectName
 
-# å®šç¾©è¦å»ºç«‹çš„è³‡æ–™å¤¾æ¸…å–®
+# ©w¸q­n«Ø¥ßªº¸ê®Æ§¨²M³æ
 $folders = @(
-    "â—å®Œæˆåœ–é¢",
-    "A-æ–½å·¥åœ–",
-    "B-é ç®—æ›¸",
-    "C-æ–‡ä»¶æª”",
-    "D-å®¤å…§è¨­è¨ˆ",
-    "E-è¨­å‚™å» å•†",
-    "F-ææ–™æè³ª",
-    "G-åœ–é¢è£½ä½œ",
-    "H-ç°¡å ±ppt",
-    "I-ç¾æ³ç…§ç‰‡"
+    "¡´§¹¦¨¹Ï­±",
+    "A-¬I¤u¹Ï",
+    "B-¹wºâ®Ñ",
+    "C-¤å¥óÀÉ",
+    "D-«Ç¤º³]­p",
+    "E-³]³Æ¼t°Ó",
+    "F-§÷®Æ§÷½è",
+    "G-¹Ï­±»s§@",
+    "H-Â²³øppt",
+    "I-²{ªp·Ó¤ù"
 )
 
-# æ‰¹æ¬¡å»ºç«‹è³‡æ–™å¤¾
+# §å¦¸«Ø¥ß¸ê®Æ§¨
 foreach ($folder in $folders) {
     if (-not (Test-Path $folder)) {
         New-Item -ItemType Directory -Path $folder
-        Write-Host "å·²å»ºç«‹: $folder" -ForegroundColor Green
+        Write-Host "¤w«Ø¥ß: $folder" -ForegroundColor Green
     } else {
-        Write-Host "è·³é: $folder (å·²å­˜åœ¨)" -ForegroundColor Yellow
+        Write-Host "¸õ¹L: $folder (¤w¦s¦b)" -ForegroundColor Yellow
     }
 }
 
-Write-Host "`nå°ˆæ¡ˆåˆå§‹åŒ–å®Œæˆï¼" -ForegroundColor Cyan
+Write-Host "`n±M®×ªì©l¤Æ§¹¦¨¡I" -ForegroundColor Cyan

@@ -1,30 +1,30 @@
-# ©w¸q±M®×¦WºÙ¡]¹w³]¬° Project¡A¤]¥i°õ¦æ®É­×§ï¡^
+ï»¿# å®šç¾©å°ˆæ¡ˆåç¨±ï¼ˆé è¨­ç‚º Projectï¼Œä¹Ÿå¯åŸ·è¡Œæ™‚ä¿®æ”¹ï¼‰
 $projectName = "NewProject"
 if (-not (Test-Path $projectName)) { New-Item -ItemType Directory -Path $projectName }
 cd $projectName
 
-# ©w¸q­n«Ø¥ßªº¸ê®Æ§¨²M³æ
+# å®šç¾©è¦å»ºç«‹çš„è³‡æ–™å¤¾æ¸…å–®
 $folders = @(
-    "¡´§¹¦¨¹Ï­±",
-    "A-¬I¤u¹Ï",
-    "B-¹wºâ®Ñ",
-    "C-¤å¥óÀÉ",
-    "D-«Ç¤º³]­p",
-    "E-³]³Æ¼t°Ó",
-    "F-§÷®Æ§÷½è",
-    "G-¹Ï­±»s§@",
-    "H-Â²³øppt",
-    "I-²{ªp·Ó¤ù"
+    "â—å®Œæˆåœ–é¢",
+    "A-æ–½å·¥åœ–",
+    "B-é ç®—æ›¸",
+    "C-æ–‡ä»¶æª”",
+    "D-å®¤å…§è¨­è¨ˆ",
+    "E-è¨­å‚™å» å•†",
+    "F-ææ–™æè³ª",
+    "G-åœ–é¢è£½ä½œ",
+    "H-ç°¡å ±ppt",
+    "I-ç¾æ³ç…§ç‰‡"
 )
 
-# §å¦¸«Ø¥ß¸ê®Æ§¨
+# æ‰¹æ¬¡å»ºç«‹è³‡æ–™å¤¾
 foreach ($folder in $folders) {
     if (-not (Test-Path $folder)) {
         New-Item -ItemType Directory -Path $folder
-        Write-Host "¤w«Ø¥ß: $folder" -ForegroundColor Green
+        Write-Host "å·²å»ºç«‹: $folder" -ForegroundColor Green
     } else {
-        Write-Host "¸õ¹L: $folder (¤w¦s¦b)" -ForegroundColor Yellow
+        Write-Host "è·³é: $folder (å·²å­˜åœ¨)" -ForegroundColor Yellow
     }
 }
 
-Write-Host "`n±M®×ªì©l¤Æ§¹¦¨¡I" -ForegroundColor Cyan
+Write-Host "`nå°ˆæ¡ˆåˆå§‹åŒ–å®Œæˆï¼" -ForegroundColor Cyan

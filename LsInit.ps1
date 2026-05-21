@@ -1,4 +1,5 @@
 ﻿# 定義專案名稱（預設為 Project，也可執行時修改）
+Write-Host "V1.1"
 $projectName = "NewProject"
 if (-not (Test-Path $projectName)) { New-Item -ItemType Directory -Path $projectName }
 cd $projectName
@@ -28,3 +29,4 @@ foreach ($folder in $folders) {
 }
 
 Write-Host "`n專案初始化完成！" -ForegroundColor Cyan
+

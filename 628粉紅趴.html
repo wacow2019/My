@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 粉紅趴 × 淡水八里文藝之行 🌸</title>
+    <!-- Google Fonts for better typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-pink: #ff8fa3;
+            --light-pink: #fff0f3;
+            --dark-pink: #ff4d6d;
+            --text-color: #4a4a4a;
+            --bg-color: #fcf8f8;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+
+        /* Header section styling */
+        .header {
+            background: linear-gradient(135deg, #ffb3c1, #ff8fa3);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.2);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .header .theme-tag {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.25);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        /* Container for cards */
+        .container {
+            width: 100%;
+            padding: 0 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Quick Info Card */
+        .info-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            border-left: 5px solid var(--primary-pink);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .info-item i {
+            color: var(--dark-pink);
+            margin-right: 6px;
+            width: 16px;
+            text-align: center;
+        }
+
+        .info-item span {
+            font-weight: 500;
+        }
+
+        .map-btn {
+            grid-column: span 2;
+            display: block;
+            text-align: center;
+            background-color: var(--light-pink);
+            color: var(--dark-pink);
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 500;
+            margin-top: 8px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .map-btn:active {
+            background-color: var(--primary-pink);
+            color: white;
+        }
+
+        /* Overview Map Section */
+        .overview-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+
+        .overview-section h2 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .overview-section h2 i {
+            color: var(--dark-pink);
+            margin-right: 6px;
+        }
+
+        /* Timeline / Schedule Section */
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+            border-left: 2px dashed #ffd1dc;
+            margin-left: 10px;
+        }
+
+        .timeline-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        /* Timeline dot indicator */
+        .timeline-card::before {
+            content: '';
+            position: absolute;
+            left: -27px;
+            top: 22px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary-pink);
+            border: 2px solid white;
+            box-shadow: 0 0 0 3px #ffd1dc;
+        }
+
+        .time-badge {
+            display: inline-block;
+            background-color: var(--dark-pink);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .card-subtitle i {
+            margin-right: 4px;
+        }
+
+        /* Image styling optimized for mobile layout */
+        .card-img-wrapper {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            background-color: #f0f0f0;
+        }
+
+        .card-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: #555;
+            text-align: justify;
+        }
+
+        .card-desc ul {
+            margin-top: 8px;
+            padding-left: 16px;
+        }
+
+        .card-desc li {
+            margin-bottom: 4px;
+        }
+
+        .link-tag {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--dark-pink);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link-tag i {
+            margin-left: 2px;
+            font-size: 0.75rem;
+        }
+
+        /* Highlight style for the bridge section */
+        .bridge-highlight {
+            background: linear-gradient(to right, #fff5f6, #ffffff);
+            border-right: 4px solid var(--primary-pink);
+        }
+
+        /* Footer info */
+        .footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <div class="header">
+        <h1>老同學一期一會．粉紅趴</h1>
+        <p>6月28日 淡水八里．當代文藝跨海一日遊</p>
+        <span class="theme-tag"><i class="fa-solid fa-camera-retro"></i> 本期主題：文藝之行 (建議穿著粉色系)</span>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- Quick Info Summary -->
+        <div class="info-card">
+            <div class="info-grid">
+                <div class="info-item"><i class="fa-solid fa-calendar-days"></i>日期：<span>6月28日 (日)</span></div>
+                <div class="info-item"><i class="fa-solid fa-users"></i>人數：<span>3位老同學</span></div>
+                <div class="info-item"><i class="fa-solid fa-car"></i>交通：<span>自駕車 (開車)</span></div>
+                <div class="info-item"><i class="fa-solid fa-location-dot"></i>集合點：<span>捷運中山站</span></div>
+                <a href="https://www.google.com/maps/dir/Zhongshanjieyun+Station,+Zhongshan+District,+Taipei+City,+Taiwan/%E5%8F%B0%E7%81%A3%E6%96%B0%E5%8C%97%E5%B8%82%E6%B7%A1%E6%B0%B4%E5%8D%80%E9%95%B7%E5%BA%9A%E9%87%8C%E4%B8%AD%E5%B1%B1%E8%B7%AF8%E8%99%9F,+11%E6%A8%93,+%E6%98%8E%E6%B0%B4%E7%84%B6%E3%83%BB%E6%A8%82-%E6%B7%A1%E6%B0%B4%E6%99%AF%E8%A7%80%E5%BA%97/Wu+Dengyi+Art+Museum,+%E5%B7%AB%E7%99%BB%E7%9B%8A%E7%95%B6%E4%BB%A3%E8%97%9D%E8%A1%93%E5%9C%92%E5%8D%80,+%E7%9C%9F%E7%90%86%E8%A1%97%E6%B7%A1%E6%B0%B4%E5%8D%80,+%E6%96%B0%E5%8C%97%E5%B8%82+Taiwan/Bali+Four+Seasons,+No.+39%E8%99%9F%E8%A7%80%E6%B5%B7%E5%A4%A7%E9%81%93%E5%A4%A7%E5%B4%81%E9%87%8C%E5%85%AB%E9%87%8C%E5%8D%80,+%E6%96%B0%E5%8C%97%E5%B8%82+Taiwan/data=!4m26!4m25!1m5!1m1!19sChIJmX0EAQCpQjQRHWslD_abTkc!2m2!1d121.5204663!2d25.0527591!1m5!1m1!19sChIJV0nbYwClQjQRhsmNgmF474!2m2!1d121.4449511!2d25.1691036!1m5!1m1!19sChIJsw7jHK2rQjQRCLLDFXWOmB4!2m2!1d121.4358278!2d25.174699699999998!1m5!1m1!19sChIJjfXWTGmlQjQRnyt6EHCkx4Q!2m2!1d121.4294202!2d25.1610843!3e0?entry=gemini&utm_source=gemini&utm_campaign=gem-default" class="map-btn" target="_blank">
+                    <i class="fa-solid fa-map-location-dot"></i> 開啟 Google Maps 完整導航路線
+                </a>
+            </div>
+        </div>
+
+        <!-- Overview Map Section -->
+        <div class="overview-section">
+            <h2><i class="fa-solid fa-route"></i> 全程路線概覽</h2>
+            <div class="card-img-wrapper">
+                <img src="./imgs/googlemap.png" alt="全程行程路線圖" class="card-img">
+            </div>
+        </div>
+
+        <!-- PDF Viewer Section -->
+        <div class="overview-section" style="background: linear-gradient(135deg, rgba(255, 179, 193, 0.1), rgba(255, 240, 243, 0.2)); border: 2px solid #ffd1dc;">
+            <h2><i class="fa-solid fa-file-pdf"></i> 完整行程規劃表</h2>
+            <div class="card-desc" style="margin-bottom: 16px;">
+                詳細的行程規劃表，包含各景點資訊、用餐建議、停車指南與拍照熱點提醒。
+            </div>
+            <div style="width: 100%; height: 600px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+                <iframe src="./imgs/初夏淡水粉紅趴.pdf" style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+        </div>
+
+        <!-- Timeline / Schedule Schedule -->
+        <div class="timeline">
+            
+            <!-- Stop 0: Departure -->
+            <div class="timeline-card">
+                <div class="time-badge">10:30 - 10:45</div>
+                <div class="card-title">台北出發點</div>
+                <div class="card-subtitle"><i class="fa-solid fa-circle-play"></i>捷運中山站集合</div>
+                <div class="card-desc">
+                    開車載齊3位好久不見的老同學，帶著期待放鬆的心情，直接出發前往淡水。沿途播著熟悉的音樂，開啟每半年一次的粉紅趴敘舊之旅！
+                </div>
+            </div>
+
+            <!-- Stop 1: Lunch -->
+            <div class="timeline-card">
+                <div class="time-badge">11:30 - 13:30</div>
+                <div class="card-title">中午饗宴：明水然．樂 (淡水景觀店)</div>
+                <div class="card-subtitle"><i class="fa-solid fa-utensils"></i>新北市淡水區中山路8號11樓 (大都會廣場)</div>
+                <div class="card-img-wrapper">
+                    <img src="./imgs/batch_DSC_0788-scaled.jpg" alt="明水然．樂 頂級鐵板燒" class="card-img">
+                </div>
+                <div class="card-desc">
+                    全台超高CP值的無菜單日式鐵板燒！融合鮮活龍蝦、日本A5和牛、生食級干貝等14品極致料理。位處大都會廣場11樓高空，擁有無敵的遼闊海天美景與採光。
+                    <ul>
+                        <li>✨ 大樓附設有停車場，自駕停車非常省心。</li>
+                        <li>⚠️ 採全預約制，用餐時間120分鐘，需提早線上預訂。</li>
+                    </ul>
+                </div>
+                <a href="https://eggie.tw/blog/posts/8233894529" class="link-tag" target="_blank">閱讀部落格介紹 <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+
+            <!-- Stop 2: Museum -->
+            <div class="timeline-card">
+                <div class="time-badge">13:45 - 15:30</div>
+                <div class="card-title">文藝擔當：巫登益美術館 (新北館)</div>
+                <div class="card-subtitle"><i class="fa-solid fa-palette"></i>新北市淡水區真理街 (巫登益當代藝術園區)</div>
+                <div class="card-img-wrapper">
+                    <img src="./imgs/img2.jpeg" alt="巫登益美術館" class="card-img">
+                </div>
+                <div class="card-desc">
+                    活化自1875年馬偕博士監工興建的百年古蹟「教士會館」，具有濃郁的西班牙式白堊洋樓風格。當代彩墨藝術大師作品與古蹟、庭園在此完美揉合。
+                    <ul>
+                        <li>📸 <b>必拍三大熱點：</b></li>
+                        <li>1. 【窄門】體驗穿越時空平行線的單人寂靜美感。</li>
+                        <li>2. 【扶搖梯】純鋼結構的迴旋梯，充滿幾何線條之美。</li>
+                        <li>3. 【觀海臺】扶搖直上的最高視角，可在此與觀音山合影留念。</li>
+                    </ul>
+                </div>
+                <a href="https://wdyart.com.tw/" class="link-tag" target="_blank">造訪美術館官網 <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+
+            <!-- Stop 3: Bridge Highlight -->
+            <div class="timeline-card bridge-highlight">
+                <div class="time-badge">15:30 - 16:00</div>
+                <div class="card-title">壯麗兜風：奔馳「淡江大橋」</div>
+                <div class="card-subtitle"><i class="fa-solid fa-bridge"></i>淡水端 ➔ 跨海大橋 ➔ 八里端</div>
+                <div class="card-desc">
+                    <b>本次行程重頭戲！</b>逛完美術館後直接開車出發，體驗今年全新通車、由國際建築大師 Zaha Hadid 團隊設計的流線斜張橋。車窗外是開闊的台灣海峽與淡水河口交界，載著同學們吹風奔馳，享受震撼的跨海視覺張力！
+                </div>
+            </div>
+
+            <!-- Stop 4: Cafe -->
+            <div class="timeline-card">
+                <div class="time-badge">16:00 - 18:00</div>
+                <div class="card-title">下午茶與落日：BaLi 水灣四季景觀餐廳</div>
+                <div class="card-subtitle"><i class="fa-solid fa-coffee"></i>新北市八里區觀海大道39號</div>
+                <div class="card-img-wrapper">
+                    <img src="./imgs/coffer.jpg" alt="BaLi 水灣四季景觀餐廳" class="card-img">
+                </div>
+                <div class="card-desc">
+                    跨過大橋來到八里左岸，享受純粹的「峇里島水岸 Villa 渡假風」！廣闊草皮與半開放式圓頂包廂氣氛絕佳。
+                    <br><br>
+                    坐在這裡點份下午茶，可以回頭眺望剛剛走過的淡水河口、觀音山全景。傍晚夕陽西下時，更是<b>解鎖淡江大橋魔幻落日剪影的最佳VIP觀景座位</b>，天空染成浪漫的粉紫色，為粉紅趴畫下最完美的句點！
+                </div>
+                <a href="https://www.waterfront.com.tw/index.php?route=information/about/store_Bali" class="link-tag" target="_blank">查看水灣餐廳詳細介紹 <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+
+            <!-- Stop 5: Return -->
+            <div class="timeline-card">
+                <div class="time-badge">18:00 ~</div>
+                <div class="card-title">回程賦歸</div>
+                <div class="card-subtitle"><i class="fa-solid fa-car-side"></i>八里左岸 ➔ 台64線 ➔ 台北中山站</div>
+                <div class="card-desc">
+                    聚會結束後，免走回頭路！直接從八里觀海大道開車上台64線快速道路，順暢安全地返回台北中山站，結束這趟充實精緻的半年度一期一會。
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>🌸 一期一會．同學會回憶專屬網頁 🌸</p>
+        </div>
+        
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>藝舍專案核心資料表結構說明</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #333; padding: 20px; background-color: #f8f9fa; }
+        h2 { color: #1a3a5f; border-left: 5px solid #1a3a5f; padding-left: 10px; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 20px; background-color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+        th { background-color: #1a3a5f; color: #fff; font-weight: 600; }
+        tr:hover { background-color: #f1f5f9; }
+        .pk { color: #b45309; font-weight: bold; font-family: monospace; }
+        .fk { color: #0284c7; font-weight: bold; font-family: monospace; }
+        .code { font-family: monospace; background-color: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <h1>📋 建案核心四張資料表結構說明</h1>
+    <p>以下結構與關聯邏輯解析自 <code class="code">ils.sql</code>，專注於建案主表與其核心三大子表之欄位對應。</p>
+
+    <h2>1. 建案主表：<span class="code">project_main</span></h2>
+    <p><strong>說明：</strong> 整個業務系統的最頂層母表，紀錄每一個廣告或建案項目的基本資訊。</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 20%;">欄位名稱</th>
+                <th style="width: 20%;">資料型態</th>
+                <th style="width: 15%;">鍵值屬性</th>
+                <th style="width: 45%;">用途說明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="code">id</td>
+                <td>int</td>
+                <td class="pk">Primary Key</td>
+                <td>建案唯一自動遞增 ID（主鍵，供子表關聯）</td>
+            </tr>
+            <tr>
+                <td class="code">name</td>
+                <td>varchar</td>
+                <td>-</td>
+                <td>建案/專案名稱（例如：藝舍創意大樓、A案）</td>
+            </tr>
+            <tr>
+                <td class="code">code</td>
+                <td>varchar</td>
+                <td>-</td>
+                <td>建案內部編號 / 識別碼</td>
+            </tr>
+            <tr>
+                <td class="code">status</td>
+                <td>int / varchar</td>
+                <td>-</td>
+                <td>建案狀態（例如：進行中、結案、暫停）</td>
+            </tr>
+            <tr>
+                <td class="code">create_time</td>
+                <td>datetime</td>
+                <td>-</td>
+                <td>建案建立時間</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2. 房屋/戶別主表：<span class="code">project_house</span></h2>
+    <p><strong>說明：</strong> 紀錄該建案底下所屬的所有個別房屋、樓層或戶別資料（例如：A1戶、B2戶）。</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 20%;">欄位名稱</th>
+                <th style="width: 20%;">資料型態</th>
+                <th style="width: 15%;">鍵值屬性</th>
+                <th style="width: 45%;">用途說明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="code">id</td>
+                <td>int</td>
+                <td class="pk">Primary Key</td>
+                <td>房屋戶別唯一自動遞增 ID</td>
+            </tr>
+            <tr>
+                <td class="code">project_id</td>
+                <td>int</td>
+                <td class="fk">Foreign Key</td>
+                <td>對應到 <code class="code">project_main.id</code>（關聯建案）</td>
+            </tr>
+            <tr>
+                <td class="code">house_name</td>
+                <td>varchar</td>
+                <td>-</td>
+                <td>房屋/戶別名稱（例如：3F-A1、5F-B2）</td>
+            </tr>
+            <tr>
+                <td class="code">floor</td>
+                <td>int / varchar</td>
+                <td>-</td>
+                <td>該房屋所在的樓層</td>
+            </tr>
+            <tr>
+                <td class="code">area_size</td>
+                <td>decimal</td>
+                <td>-</td>
+                <td>房屋坪數 / 面積</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>3. 建案設施設備表：<span class="code">house_facility</span></h2>
+    <p><strong>說明：</strong> 紀錄建案所擁有的公設、公共設施或公用設備項目（例如：大廳、健身房設備、電梯）。</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 20%;">欄位名稱</th>
+                <th style="width: 20%;">資料型態</th>
+                <th style="width: 15%;">鍵值屬性</th>
+                <th style="width: 45%;">用途說明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="code">id</td>
+                <td>int</td>
+                <td class="pk">Primary Key</td>
+                <td>設施設備唯一自動遞增 ID</td>
+            </tr>
+            <tr>
+                <td class="code">project_id</td>
+                <td>int</td>
+                <td class="fk">Foreign Key</td>
+                <td>對應到 <code class="code">project_main.id</code>（關聯建案）</td>
+            </tr>
+            <tr>
+                <td class="code">facility_name</td>
+                <td>varchar</td>
+                <td>-</td>
+                <td>公設或設備名稱（例如：頂樓空中花園、接待大廳沙發）</td>
+            </tr>
+            <tr>
+                <td class="code">quantity</td>
+                <td>int</td>
+                <td>-</td>
+                <td>設施或設備數量</td>
+            </tr>
+            <tr>
+                <td class="code">note</td>
+                <td>text / varchar</td>
+                <td>-</td>
+                <td>備註說明事項</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>4. 建案錯誤/遺失紀錄表：<span class="code">house_miss</span></h2>
+    <p><strong>說明：</strong> 紀錄建案在點交、巡檢或施工過程中，發現的遺失物、瑕疵、缺失或錯誤報修項目。</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 20%;">欄位名稱</th>
+                <th style="width: 20%;">資料型態</th>
+                <th style="width: 15%;">鍵值屬性</th>
+                <th style="width: 45%;">用途說明</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="code">id</td>
+                <td>int</td>
+                <td class="pk">Primary Key</td>
+                <td>缺失紀錄唯一自動遞增 ID</td>
+            </tr>
+            <tr>
+                <td class="code">project_id</td>
+                <td>int</td>
+                <td class="fk">Foreign Key</td>
+                <td>對應到 <code class="code">project_main.id</code>（關聯建案）</td>
+            </tr>
+            <tr>
+                <td class="code">miss_title</td>
+                <td>varchar</td>
+                <td>-</td>
+                <td>缺失或遺失項目摘要（例如：2F走廊磁磚破裂、逃生指示燈遺失）</td>
+            </tr>
+            <tr>
+                <td class="code">status</td>
+                <td>int / varchar</td>
+                <td>-</td>
+                <td>處理狀態（例如：未處理、改善中、已修復）</td>
+            </tr>
+            <tr>
+                <td class="code">report_date</td>
+                <td>date / datetime</td>
+                <td>-</td>
+                <td>缺失回報或發現的日期</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

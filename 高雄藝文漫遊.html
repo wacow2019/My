@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>高雄藝文與港灣漫遊 2天1夜行程手冊</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            khnavy: '#0f172a',
+            khgold: '#d97706',
+            khteal: '#0d9488',
+            khcoral: '#e11d48'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px;
+      padding: 0px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      background: #1e293b;
+      color: #f8fafc;
+    }
+    .leaflet-popup-content {
+      margin: 0;
+      line-height: 1.4;
+    }
+    .leaflet-container a.leaflet-popup-close-button {
+      color: #ffffff;
+      padding: 6px 6px 0 0;
+      z-index: 10;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen pb-12">
+
+  <!-- Header Banner -->
+  <header class="relative bg-gradient-to-r from-slate-900 via-slate-800 to-teal-950 border-b border-slate-700 py-8 px-4 sm:px-8 shadow-2xl">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div>
+        <div class="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-full text-xs font-semibold tracking-wider mb-2">
+          <i class="fa-solid fa-masks-theater"></i> 藝文小旅行 ‧ 高雄 2 天 1 夜
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">高雄港灣藝文漫遊行程手冊</h1>
+        <p class="text-slate-400 mt-1 text-sm sm:text-base">8/21 (五) - 8/22 (六) ｜ 衛武營舞台劇《都更男女》觀賞之旅</p>
+      </div>
+
+      <!-- Quick Info Badges -->
+      <div class="flex flex-wrap gap-2 sm:gap-3">
+        <div class="bg-slate-800/80 border border-slate-700 p-3 rounded-xl flex items-center gap-3">
+          <div class="bg-amber-500/20 p-2.5 rounded-lg text-amber-400">
+            <i class="fa-solid fa-train text-lg"></i>
+          </div>
+          <div class="text-xs">
+            <span class="text-slate-400 block">高鐵車次座位</span>
+            <span class="font-bold text-white text-sm">商務車廂 6車 3D</span>
+          </div>
+        </div>
+
+        <div class="bg-slate-800/80 border border-slate-700 p-3 rounded-xl flex items-center gap-3">
+          <div class="bg-teal-500/20 p-2.5 rounded-lg text-teal-400">
+            <i class="fa-solid fa-hotel text-lg"></i>
+          </div>
+          <div class="text-xs">
+            <span class="text-slate-400 block">8/21 住宿飯店</span>
+            <span class="font-bold text-white text-sm">城市商旅 - 高雄駁二館</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-8 mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+    <!-- Left Column: Tabs & Timeline (7 cols) -->
+    <section class="lg:col-span-7 space-y-6">
+
+      <!-- Navigation Tabs -->
+      <div class="flex bg-slate-800/90 p-1.5 rounded-2xl border border-slate-700 text-sm font-medium">
+        <button id="tab-day1" onclick="switchDay(1)" class="flex-1 py-3 rounded-xl text-center transition duration-200 bg-amber-500 text-slate-950 font-bold shadow-md">
+          <i class="fa-solid fa-compass mr-1.5"></i> Day 1 (8/21 Fri)
+        </button>
+        <button id="tab-day2" onclick="switchDay(2)" class="flex-1 py-3 rounded-xl text-center transition duration-200 text-slate-400 hover:text-white">
+          <i class="fa-solid fa-ticket mr-1.5"></i> Day 2 (8/22 Sat)
+        </button>
+        <button id="tab-spots" onclick="switchDay('spots')" class="flex-1 py-3 rounded-xl text-center transition duration-200 text-slate-400 hover:text-white">
+          <i class="fa-solid fa-utensils mr-1.5"></i> 店家與景點介紹
+        </button>
+      </div>
+
+      <!-- Day 1 Timeline Content -->
+      <div id="content-day1" class="space-y-4">
+        <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-sun text-amber-400 text-xl"></i>
+            <div>
+              <h3 class="font-bold text-white text-base">Day 1：港灣微風、文創藝術與鹽埕美食</h3>
+              <p class="text-xs text-amber-200/80">體驗舊城老字號小吃、大港橋旋轉秀與流行音樂中心落日</p>
+            </div>
+          </div>
+          <a href="https://www.google.com/maps/dir/高鐵左營站/城市商旅高雄駁二館/鴨肉珍/大港橋/高雄流行音樂中心" target="_blank" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow">
+            <i class="fa-solid fa-map-location-dot"></i> Google Maps 路線
+          </a>
+        </div>
+
+        <div class="relative border-l-2 border-slate-700 ml-4 pl-6 space-y-6 text-sm">
+
+          <!-- Item 1 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">09:43 - 11:20</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-train mr-1"></i>高鐵桃園➔左營</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">搭乘高鐵前往高雄（商務車廂）</h4>
+              <p class="text-slate-300 text-xs mt-1">座位：6 車 3D ｜ 享受商務車廂免費飲料與點心，準備開啟旅行！</p>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-slate-600 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-teal-400 bg-teal-400/10 px-2.5 py-0.5 rounded-full border border-teal-400/20">11:30 - 12:15</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-subway mr-1"></i>捷運轉乘</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">前往城市商旅 - 高雄駁二館寄放行李</h4>
+              <p class="text-slate-300 text-xs mt-1">動線：捷運左營站搭乘【紅線】至「美麗島站」➔ 轉乘【橘線】至「鹽埕埔站」（步行約 5-8 分鐘即可抵達飯店寄放行李）。</p>
+              <div class="mt-2 pt-2 border-t border-slate-700/50 flex justify-end">
+                <a href="https://www.google.com/maps/search/?api=1&query=城市商旅+高雄駁二館" target="_blank" class="text-xs text-teal-400 hover:underline flex items-center gap-1">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> 開啟飯店地圖
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-slate-600 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">12:30 - 14:00</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-utensils mr-1"></i>在地午餐</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">鹽埕老字號經典美食巡禮</h4>
+              <p class="text-slate-300 text-xs mt-1">品嚐米其林必比登推薦的「鴨肉珍」鴨肉飯與下水湯，順手買一杯古早味樺達奶茶或双妃奶茶。</p>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-rose-500 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-rose-400 bg-rose-400/10 px-2.5 py-0.5 rounded-full border border-rose-400/20">14:30 - 17:00</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-camera mr-1"></i>重點景點</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">駁二藝術特區漫步 ＆ 15:00 大港橋旋轉秀</h4>
+              <p class="text-slate-300 text-xs mt-1">逛大義倉庫文創選品、微熱山丘與誠品。**下午 3:00** 務必前往大港橋旁觀賞全台唯一水平旋轉橋開合秀！</p>
+            </div>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-slate-600 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-sky-400 bg-sky-400/10 px-2.5 py-0.5 rounded-full border border-sky-400/20">17:30 - 19:00</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-mountain-sun mr-1"></i>港灣落日</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">高雄流行音樂中心 ＆ 愛河灣夕陽</h4>
+              <p class="text-slate-300 text-xs mt-1">漫步至音浪塔與珊瑚礁群，沿著愛河灣欣賞璀璨落日餘暉與海景夜色。</p>
+            </div>
+          </div>
+
+          <!-- Item 6 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-slate-600 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">19:30 - 22:00</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-wine-glass mr-1"></i>晚餐夜景</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">晚餐時光 ＆ 返回城市商旅入住</h4>
+              <p class="text-slate-300 text-xs mt-1">選擇駁二週邊美式餐酒館、棧貳庫海景餐廳，或搭輕軌至六合夜市品嚐小吃。夜宿城市商旅高雄駁二館。</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Day 2 Timeline Content (Hidden by default) -->
+      <div id="content-day2" class="space-y-4 hidden">
+        <div class="bg-teal-500/10 border border-teal-500/30 rounded-xl p-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-masks-theater text-teal-400 text-xl"></i>
+            <div>
+              <h3 class="font-bold text-white text-base">Day 2：老城漫活、衛武營看戲與滿載賦歸</h3>
+              <p class="text-xs text-teal-200/80">核心活動：14:30 衛武營國家藝術文化中心《都更男女》</p>
+            </div>
+          </div>
+          <a href="https://www.google.com/maps/dir/城市商旅高雄駁二館/棧貳庫KW2/衛武營國家藝術文化中心/高鐵左營站" target="_blank" class="px-3 py-1.5 bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow">
+            <i class="fa-solid fa-map-location-dot"></i> Google Maps 路線
+          </a>
+        </div>
+
+        <div class="relative border-l-2 border-slate-700 ml-4 pl-6 space-y-6 text-sm">
+
+          <!-- Item 1 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-teal-500 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-teal-400 bg-teal-400/10 px-2.5 py-0.5 rounded-full border border-teal-400/20">09:00 - 10:30</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-door-open mr-1"></i>飯店退房</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">悠閒享用早餐 ＆ 辦理退房</h4>
+              <p class="text-slate-300 text-xs mt-1">退房後可先將隨身行李暫時寄放於飯店櫃檯，輕鬆出門。</p>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-slate-600 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-sky-400 bg-sky-400/10 px-2.5 py-0.5 rounded-full border border-sky-400/20">10:30 - 12:00</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-anchor mr-1"></i>港灣漫步</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">哈瑪星鐵道文化園區 或 棧貳庫 KW2</h4>
+              <p class="text-slate-300 text-xs mt-1">吹海風、看百年舊鐵道老火車，或至棧貳庫搭乘全台唯一純白海景旋轉木馬拍照。</p>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-slate-600 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">12:00 - 13:00</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-bowl-food mr-1"></i>午餐享用</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">古早味午餐：港園牛肉麵 或 鹽埕鍋燒意麵</h4>
+              <p class="text-slate-300 text-xs mt-1">享用傳承超過 60 年濃郁滑順的港園牛肉乾拌麵，或選擇鹽埕古早味鍋燒意麵。</p>
+            </div>
+          </div>
+
+          <!-- Item 4 (Key Highlight) -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-rose-500 ring-4 ring-slate-900"></div>
+            <div class="bg-gradient-to-r from-rose-950/40 to-slate-800 border border-rose-500/50 rounded-xl p-4 shadow-xl">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-white bg-rose-600 px-2.5 py-0.5 rounded-full">13:00 - 17:00 核心行程</span>
+                <span class="text-xs text-rose-300"><i class="fa-solid fa-masks-theater mr-1"></i>衛武營戲劇</span>
+              </div>
+              <h4 class="text-lg font-extrabold text-amber-300 mt-2">衛武營國家藝術文化中心 ｜ 舞台劇《都更男女》</h4>
+              <div class="text-slate-200 text-xs space-y-1 mt-2">
+                <p><strong>13:00 - 13:40</strong>：回飯店取行李，搭乘捷運【橘線】從「鹽埕埔站」直達「衛武營站」（6號出口直通場館）。</p>
+                <p class="text-amber-200 font-semibold">💡 貼心策略：將行李直接寄放於衛武營場館免費/投幣式大型置物櫃，看完劇直接往左營高鐵站，免跑回駁二！</p>
+                <p><strong>14:00 - 14:30</strong>：入場準備、驗票領票、合影留念。</p>
+                <p><strong>14:30 - 17:00</strong>：欣賞舞台劇《都更男女》精彩演出。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-slate-600 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-sky-400 bg-sky-400/10 px-2.5 py-0.5 rounded-full border border-sky-400/20">17:00 - 18:30</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-tree mr-1"></i>衛武營漫步</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">榕樹廣場散步 ＆ 鳳山在地小吃</h4>
+              <p class="text-slate-300 text-xs mt-1">欣賞衛武營全球最大單一屋頂建築美學，或至鄰近鳳山中華街夜市享用在地傳統小吃。</p>
+            </div>
+          </div>
+
+          <!-- Item 6 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">18:45 - 20:00</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-bag-shopping mr-1"></i>搭車與採買</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">搭乘捷運至左營高鐵站 ＆ 伴手禮採買</h4>
+              <p class="text-slate-300 text-xs mt-1">衛武營站（橘線）➔ 美麗島站轉乘紅線 ➔ 左營站（約 25-30 分鐘）。高鐵站內購買舊振南或不二緻果芋頭蛋糕。</p>
+            </div>
+          </div>
+
+          <!-- Item 7 -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-amber-500 ring-4 ring-slate-900"></div>
+            <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-4 shadow-lg">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">20:00 - 21:35</span>
+                <span class="text-xs text-slate-400"><i class="fa-solid fa-train mr-1"></i>返程高鐵</span>
+              </div>
+              <h4 class="text-base font-bold text-white mt-2">搭乘高鐵返回桃園（商務車廂）</h4>
+              <p class="text-slate-300 text-xs mt-1">座位：6 車 3D ｜ 享受舒適回程商務車廂，結束充實快樂的高雄藝文之旅！</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Spots Catalog Content (Hidden by default) -->
+      <div id="content-spots" class="space-y-4 hidden">
+        <h3 class="font-bold text-white text-base border-b border-slate-700 pb-2 flex items-center justify-between">
+          <span>精選美景色圖文介紹</span>
+          <span class="text-xs font-normal text-slate-400"><i class="fa-solid fa-hand-pointer text-amber-400 mr-1"></i>點擊圖片可放大觀看</span>
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          <!-- Card 1: 衛武營 -->
+          <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-lg flex flex-col group">
+            <div class="relative h-44 overflow-hidden bg-slate-950 cursor-pointer" onclick="openModal('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjc1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE0NSIgZmlsbD0iIzExMTgyNyIvPgo8cGF0aCBkPSJNMCAzMTUgUTE1MCAyNjAgMzAwIDMwMCBUNjAwIDI4MCBUODAwIDMwMCBWNDIwIEgwWiIgZmlsbD0iIzMzNDE1NSIvPgo8cGF0aCBkPSJNMTIwIDMzMCBRMjUwIDI1NSA0MDAgMjkwIFE1MjAgMjQ1IDY5MCAzMDUgTDczMCAzNDUgSDcwWiIgZmlsbD0iI2U1ZTdlYiIvPgo8cGF0aCBkPSJNMTUwIDMzMCBRMjgwIDI4MCA0MDAgMzEwIFE1MjAgMjc1IDY2MCAzMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzk0YTNiOCIgc3Ryb2tlLXdpZHRoPSI4Ii8+CjxyZWN0IHg9IjI3MCIgeT0iMzA1IiB3aWR0aD0iMjYwIiBoZWlnaHQ9IjExNSIgcng9IjIwIiBmaWxsPSIjZjhmYWZjIi8+CjxwYXRoIGQ9Ik0yNzAgMzMwIFE0MDAgMjQ1IDUzMCAzMzAiIGZpbGw9IiNlMmU4ZjAiLz4KPGNpcmNsZSBjeD0iMTE1IiBjeT0iMzY1IiByPSIzMCIgZmlsbD0iIzE2NjUzNCIvPjxjaXJjbGUgY3g9IjY4MCIgY3k9IjM2MCIgcj0iMzgiIGZpbGw9IiMxNjY1MzQiLz4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MjAiIGZpbGw9InJnYmEoMCwwLDAsLjA4KSIvPgo8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI3NTAiIGhlaWdodD0iNzAiIHJ4PSIxMiIgZmlsbD0iIzAyMDYxNyIgb3BhY2l0eT0iLjcyIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1OCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiPuihm+atpueHn+Wci+WutuiXneihk+aWh+WMluS4reW/gzwvdGV4dD4KPHRleHQgeD0iNTAiIHk9IjgyIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNSIgZmlsbD0iI2NiZDVlMSI+55m96Imy6Z+z5rWq5bu656+JIMOXIOamleaoueW7o+WgtDwvdGV4dD4KPC9zdmc+', '衛武營國家藝術文化中心')">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjc1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE0NSIgZmlsbD0iIzExMTgyNyIvPgo8cGF0aCBkPSJNMCAzMTUgUTE1MCAyNjAgMzAwIDMwMCBUNjAwIDI4MCBUODAwIDMwMCBWNDIwIEgwWiIgZmlsbD0iIzMzNDE1NSIvPgo8cGF0aCBkPSJNMTIwIDMzMCBRMjUwIDI1NSA0MDAgMjkwIFE1MjAgMjQ1IDY5MCAzMDUgTDczMCAzNDUgSDcwWiIgZmlsbD0iI2U1ZTdlYiIvPgo8cGF0aCBkPSJNMTUwIDMzMCBRMjgwIDI4MCA0MDAgMzEwIFE1MjAgMjc1IDY2MCAzMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzk0YTNiOCIgc3Ryb2tlLXdpZHRoPSI4Ii8+CjxyZWN0IHg9IjI3MCIgeT0iMzA1IiB3aWR0aD0iMjYwIiBoZWlnaHQ9IjExNSIgcng9IjIwIiBmaWxsPSIjZjhmYWZjIi8+CjxwYXRoIGQ9Ik0yNzAgMzMwIFE0MDAgMjQ1IDUzMCAzMzAiIGZpbGw9IiNlMmU4ZjAiLz4KPGNpcmNsZSBjeD0iMTE1IiBjeT0iMzY1IiByPSIzMCIgZmlsbD0iIzE2NjUzNCIvPjxjaXJjbGUgY3g9IjY4MCIgY3k9IjM2MCIgcj0iMzgiIGZpbGw9IiMxNjY1MzQiLz4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MjAiIGZpbGw9InJnYmEoMCwwLDAsLjA4KSIvPgo8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI3NTAiIGhlaWdodD0iNzAiIHJ4PSIxMiIgZmlsbD0iIzAyMDYxNyIgb3BhY2l0eT0iLjcyIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1OCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiPuihm+atpueHn+Wci+WutuiXneihk+aWh+WMluS4reW/gzwvdGV4dD4KPHRleHQgeD0iNTAiIHk9IjgyIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNSIgZmlsbD0iI2NiZDVlMSI+55m96Imy6Z+z5rWq5bu656+JIMOXIOamleaoueW7o+WgtDwvdGV4dD4KPC9zdmc+" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="衛武營國家藝術文化中心">
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition"></div>
+              <span class="absolute top-2 right-2 bg-slate-900/80 backdrop-blur text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">
+                <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>放大
+              </span>
+            </div>
+            <div class="p-3.5 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="font-bold text-white text-sm flex items-center gap-1.5">
+                  <i class="fa-solid fa-masks-theater text-amber-400"></i> 衛武營國家藝術文化中心
+                </h4>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">全球最大單一屋頂綜合劇院，獨特白色音浪流線型建築，榕樹廣場極具特色。8/22《都更男女》演出地。</p>
+              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=衛武營國家藝術文化中心" target="_blank" class="mt-3 text-xs text-amber-400 font-semibold hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-location-dot"></i> Google 地圖導航
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 2: 駁二 & 大港橋 -->
+          <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-lg flex flex-col group">
+            <div class="relative h-44 overflow-hidden bg-slate-950 cursor-pointer" onclick="openModal('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjg1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjEzNSIgZmlsbD0idXJsKCN3YXRlcikiLz4KPHBhdGggZD0iTTAgMzUwIFExMDAgMzMwIDIwMCAzNTAgVDQwMCAzNTAgVDYwMCAzNTAgVDgwMCAzNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzY3ZThmOSIgc3Ryb2tlLXdpZHRoPSIzIiBvcGFjaXR5PSIuNSIvPgo8cGF0aCBkPSJNMTM1IDMxMCBMNjY1IDMxMCIgc3Ryb2tlPSIjZjhmYWZjIiBzdHJva2Utd2lkdGg9IjE2Ii8+CjxwYXRoIGQ9Ik0xMzUgMzEwIEwyNTAgMzEwIiBzdHJva2U9IiNmNTllMGIiIHN0cm9rZS13aWR0aD0iMTgiLz48cGF0aCBkPSJNNTUwIDMxMCBMNjY1IDMxMCIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjE4Ii8+CjxwYXRoIGQ9Ik0xNTAgMzEwIEwyNTAgMzkwIE02NTAgMzEwIEw1NTAgMzkwIiBzdHJva2U9IiNjYmQ1ZTEiIHN0cm9rZS13aWR0aD0iOCIvPgo8cmVjdCB4PSI0MCIgeT0iMjQ1IiB3aWR0aD0iMTAwIiBoZWlnaHQ9Ijc1IiBmaWxsPSIjN2MyZDEyIi8+PHJlY3QgeD0iMTUwIiB5PSIyMzAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI5MCIgZmlsbD0iIzlhMzQxMiIvPjxyZWN0IHg9IjI0NSIgeT0iMjUwIiB3aWR0aD0iOTAiIGhlaWdodD0iNzAiIGZpbGw9IiM3ODM1MGYiLz4KPGNpcmNsZSBjeD0iOTUiIGN5PSIyNDAiIHI9IjI1IiBmaWxsPSIjMjJjNTVlIi8+PGNpcmNsZSBjeD0iMjg1IiBjeT0iMjQyIiByPSIyOCIgZmlsbD0iIzE2YTM0YSIvPgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0icmdiYSgwLDAsMCwuMDgpIi8+CjxyZWN0IHg9IjI1IiB5PSIyNSIgd2lkdGg9Ijc1MCIgaGVpZ2h0PSI3MCIgcng9IjEyIiBmaWxsPSIjMDIwNjE3IiBvcGFjaXR5PSIuNzIiLz4KPHRleHQgeD0iNTAiIHk9IjU4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2ZmZiI+6aeB5LqM6Jed6KGT54m55Y2AIO+8hiDlpKfmuK/mqYs8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPua4r+eBo+WAieW6qyDDlyDmsLTlubPml4vovYnmqYs8L3RleHQ+Cjwvc3ZnPg==', '駁二藝術特區 ＆ 大港橋')">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjg1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjEzNSIgZmlsbD0idXJsKCN3YXRlcikiLz4KPHBhdGggZD0iTTAgMzUwIFExMDAgMzMwIDIwMCAzNTAgVDQwMCAzNTAgVDYwMCAzNTAgVDgwMCAzNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzY3ZThmOSIgc3Ryb2tlLXdpZHRoPSIzIiBvcGFjaXR5PSIuNSIvPgo8cGF0aCBkPSJNMTM1IDMxMCBMNjY1IDMxMCIgc3Ryb2tlPSIjZjhmYWZjIiBzdHJva2Utd2lkdGg9IjE2Ii8+CjxwYXRoIGQ9Ik0xMzUgMzEwIEwyNTAgMzEwIiBzdHJva2U9IiNmNTllMGIiIHN0cm9rZS13aWR0aD0iMTgiLz48cGF0aCBkPSJNNTUwIDMxMCBMNjY1IDMxMCIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjE4Ii8+CjxwYXRoIGQ9Ik0xNTAgMzEwIEwyNTAgMzkwIE02NTAgMzEwIEw1NTAgMzkwIiBzdHJva2U9IiNjYmQ1ZTEiIHN0cm9rZS13aWR0aD0iOCIvPgo8cmVjdCB4PSI0MCIgeT0iMjQ1IiB3aWR0aD0iMTAwIiBoZWlnaHQ9Ijc1IiBmaWxsPSIjN2MyZDEyIi8+PHJlY3QgeD0iMTUwIiB5PSIyMzAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI5MCIgZmlsbD0iIzlhMzQxMiIvPjxyZWN0IHg9IjI0NSIgeT0iMjUwIiB3aWR0aD0iOTAiIGhlaWdodD0iNzAiIGZpbGw9IiM3ODM1MGYiLz4KPGNpcmNsZSBjeD0iOTUiIGN5PSIyNDAiIHI9IjI1IiBmaWxsPSIjMjJjNTVlIi8+PGNpcmNsZSBjeD0iMjg1IiBjeT0iMjQyIiByPSIyOCIgZmlsbD0iIzE2YTM0YSIvPgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0icmdiYSgwLDAsMCwuMDgpIi8+CjxyZWN0IHg9IjI1IiB5PSIyNSIgd2lkdGg9Ijc1MCIgaGVpZ2h0PSI3MCIgcng9IjEyIiBmaWxsPSIjMDIwNjE3IiBvcGFjaXR5PSIuNzIiLz4KPHRleHQgeD0iNTAiIHk9IjU4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2ZmZiI+6aeB5LqM6Jed6KGT54m55Y2AIO+8hiDlpKfmuK/mqYs8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPua4r+eBo+WAieW6qyDDlyDmsLTlubPml4vovYnmqYs8L3RleHQ+Cjwvc3ZnPg==" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="大港橋與港灣夜景">
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition"></div>
+              <span class="absolute top-2 right-2 bg-slate-900/80 backdrop-blur text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">
+                <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>放大
+              </span>
+            </div>
+            <div class="p-3.5 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="font-bold text-white text-sm flex items-center gap-1.5">
+                  <i class="fa-solid fa-bridge text-amber-400"></i> 駁二藝術特區 ＆ 大港橋
+                </h4>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">高雄港邊舊倉庫改建文創特區。全台首座水平旋轉橋「大港橋」每日 15:00 準時進行旋轉開合秀，夜景絕美。</p>
+              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=大港橋" target="_blank" class="mt-3 text-xs text-amber-400 font-semibold hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-location-dot"></i> Google 地圖導航
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 3: 鹽埕在地美食 -->
+          <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-lg flex flex-col group">
+            <div class="relative h-44 overflow-hidden bg-slate-950 cursor-pointer" onclick="openModal('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjcwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iIzQ1MWEwMyIvPgo8cmVjdCB4PSI4MCIgeT0iMTUwIiB3aWR0aD0iNjQwIiBoZWlnaHQ9IjE1NSIgcng9IjEyIiBmaWxsPSIjZmVmM2M3Ii8+CjxyZWN0IHg9IjExMCIgeT0iMTc1IiB3aWR0aD0iNTgwIiBoZWlnaHQ9IjQ1IiBmaWxsPSIjOTkxYjFiIi8+PHJlY3QgeD0iMTEwIiB5PSIyMzAiIHdpZHRoPSI1ODAiIGhlaWdodD0iNTUiIGZpbGw9IiM3ODM1MGYiLz4KPHRleHQgeD0iNDAwIiB5PSIyMDciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSJ3aGl0ZSI+6bSoIOiCiSDnj408L3RleHQ+CjxlbGxpcHNlIGN4PSI0MDAiIGN5PSIzNDAiIHJ4PSIxMTUiIHJ5PSIzNSIgZmlsbD0iI2Q5NzcwNiIvPjxlbGxpcHNlIGN4PSI0MDAiIGN5PSIzMjgiIHJ4PSIxMDUiIHJ5PSIzMCIgZmlsbD0iI2ZlZjNjNyIvPgo8cGF0aCBkPSJNMzM1IDMyMCBRNDAwIDI4MCA0NjUgMzIwIFE0NTAgMzQ1IDQwMCAzNTAgUTM1MCAzNDUgMzM1IDMyMCIgZmlsbD0iIzkyNDAwZSIvPgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0icmdiYSgwLDAsMCwuMDgpIi8+CjxyZWN0IHg9IjI1IiB5PSIyNSIgd2lkdGg9Ijc1MCIgaGVpZ2h0PSI3MCIgcng9IjEyIiBmaWxsPSIjMDIwNjE3IiBvcGFjaXR5PSIuNzIiLz4KPHRleHQgeD0iNTAiIHk9IjU4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2ZmZiI+6bm95Z+V5Y2A6ICB5a2X6Jmf576O6aOfPC90ZXh0Pgo8dGV4dCB4PSI1MCIgeT0iODIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE1IiBmaWxsPSIjY2JkNWUxIj7ptKjogonpo68gw5cg5Y+k5pep5ZGz6KGX5pmvPC90ZXh0Pgo8L3N2Zz4=', '鹽埕區老字號美食 - 鴨肉珍')">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjcwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iIzQ1MWEwMyIvPgo8cmVjdCB4PSI4MCIgeT0iMTUwIiB3aWR0aD0iNjQwIiBoZWlnaHQ9IjE1NSIgcng9IjEyIiBmaWxsPSIjZmVmM2M3Ii8+CjxyZWN0IHg9IjExMCIgeT0iMTc1IiB3aWR0aD0iNTgwIiBoZWlnaHQ9IjQ1IiBmaWxsPSIjOTkxYjFiIi8+PHJlY3QgeD0iMTEwIiB5PSIyMzAiIHdpZHRoPSI1ODAiIGhlaWdodD0iNTUiIGZpbGw9IiM3ODM1MGYiLz4KPHRleHQgeD0iNDAwIiB5PSIyMDciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSJ3aGl0ZSI+6bSoIOiCiSDnj408L3RleHQ+CjxlbGxpcHNlIGN4PSI0MDAiIGN5PSIzNDAiIHJ4PSIxMTUiIHJ5PSIzNSIgZmlsbD0iI2Q5NzcwNiIvPjxlbGxpcHNlIGN4PSI0MDAiIGN5PSIzMjgiIHJ4PSIxMDUiIHJ5PSIzMCIgZmlsbD0iI2ZlZjNjNyIvPgo8cGF0aCBkPSJNMzM1IDMyMCBRNDAwIDI4MCA0NjUgMzIwIFE0NTAgMzQ1IDQwMCAzNTAgUTM1MCAzNDUgMzM1IDMyMCIgZmlsbD0iIzkyNDAwZSIvPgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0icmdiYSgwLDAsMCwuMDgpIi8+CjxyZWN0IHg9IjI1IiB5PSIyNSIgd2lkdGg9Ijc1MCIgaGVpZ2h0PSI3MCIgcng9IjEyIiBmaWxsPSIjMDIwNjE3IiBvcGFjaXR5PSIuNzIiLz4KPHRleHQgeD0iNTAiIHk9IjU4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2ZmZiI+6bm95Z+V5Y2A6ICB5a2X6Jmf576O6aOfPC90ZXh0Pgo8dGV4dCB4PSI1MCIgeT0iODIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE1IiBmaWxsPSIjY2JkNWUxIj7ptKjogonpo68gw5cg5Y+k5pep5ZGz6KGX5pmvPC90ZXh0Pgo8L3N2Zz4=" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="鴨肉珍老店實景">
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition"></div>
+              <span class="absolute top-2 right-2 bg-slate-900/80 backdrop-blur text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">
+                <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>放大
+              </span>
+            </div>
+            <div class="p-3.5 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="font-bold text-white text-sm flex items-center gap-1.5">
+                  <i class="fa-solid fa-utensils text-amber-400"></i> 鹽埕區老字號美食巡禮
+                </h4>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">必吃傳承 65 年必比登推薦「鴨肉珍」鮮嫩鴨肉飯與下水湯、「港園牛肉麵」滑順牛肉乾拌麵與樺達奶茶。</p>
+              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=鴨肉珍" target="_blank" class="mt-3 text-xs text-amber-400 font-semibold hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-location-dot"></i> Google 地圖導航 (鴨肉珍)
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 4: 高雄流行音樂中心 -->
+          <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-lg flex flex-col group">
+            <div class="relative h-44 overflow-hidden bg-slate-950 cursor-pointer" onclick="openModal('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjc1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE0NSIgZmlsbD0idXJsKCN3YXRlcikiLz4KPHBhdGggZD0iTTEwMCAzMzAgTDE5MCAyMjAgTDMwMCAzMzAgTDQxMCAxOTAgTDUyMCAzMzAgTDYzMCAyMjAgTDcyMCAzMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y4ZmFmYyIgc3Ryb2tlLXdpZHRoPSIyMiIvPgo8cGF0aCBkPSJNMTAwIDMzMCBMMTkwIDIyMCBMMzAwIDMzMCBMNDEwIDE5MCBMNTIwIDMzMCBMNjMwIDIyMCBMNzIwIDMzMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjUiLz4KPGNpcmNsZSBjeD0iNDAwIiBjeT0iMzUwIiByPSI3IiBmaWxsPSIjZmVmM2M3Ii8+PGNpcmNsZSBjeD0iMzAwIiBjeT0iMzcwIiByPSI1IiBmaWxsPSIjZmVmM2M3Ii8+PGNpcmNsZSBjeD0iNTIwIiBjeT0iMzY1IiByPSI2IiBmaWxsPSIjZmVmM2M3Ii8+CjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiBmaWxsPSJyZ2JhKDAsMCwwLC4wOCkiLz4KPHJlY3QgeD0iMjUiIHk9IjI1IiB3aWR0aD0iNzUwIiBoZWlnaHQ9IjcwIiByeD0iMTIiIGZpbGw9IiMwMjA2MTciIG9wYWNpdHk9Ii43MiIvPgo8dGV4dCB4PSI1MCIgeT0iNTgiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI1IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIj7pq5jpm4TmtYHooYzpn7PmqILkuK3lv4M8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPuaEm+ays+eBoyDDlyDpu4PmmI/muK/mma88L3RleHQ+Cjwvc3ZnPg==', '高雄流行音樂中心 (愛河灣)')">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjc1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE0NSIgZmlsbD0idXJsKCN3YXRlcikiLz4KPHBhdGggZD0iTTEwMCAzMzAgTDE5MCAyMjAgTDMwMCAzMzAgTDQxMCAxOTAgTDUyMCAzMzAgTDYzMCAyMjAgTDcyMCAzMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y4ZmFmYyIgc3Ryb2tlLXdpZHRoPSIyMiIvPgo8cGF0aCBkPSJNMTAwIDMzMCBMMTkwIDIyMCBMMzAwIDMzMCBMNDEwIDE5MCBMNTIwIDMzMCBMNjMwIDIyMCBMNzIwIDMzMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjUiLz4KPGNpcmNsZSBjeD0iNDAwIiBjeT0iMzUwIiByPSI3IiBmaWxsPSIjZmVmM2M3Ii8+PGNpcmNsZSBjeD0iMzAwIiBjeT0iMzcwIiByPSI1IiBmaWxsPSIjZmVmM2M3Ii8+PGNpcmNsZSBjeD0iNTIwIiBjeT0iMzY1IiByPSI2IiBmaWxsPSIjZmVmM2M3Ii8+CjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiBmaWxsPSJyZ2JhKDAsMCwwLC4wOCkiLz4KPHJlY3QgeD0iMjUiIHk9IjI1IiB3aWR0aD0iNzUwIiBoZWlnaHQ9IjcwIiByeD0iMTIiIGZpbGw9IiMwMjA2MTciIG9wYWNpdHk9Ii43MiIvPgo8dGV4dCB4PSI1MCIgeT0iNTgiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI1IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIj7pq5jpm4TmtYHooYzpn7PmqILkuK3lv4M8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPuaEm+ays+eBoyDDlyDpu4PmmI/muK/mma88L3RleHQ+Cjwvc3ZnPg==" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="高雄流行音樂中心夜景">
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition"></div>
+              <span class="absolute top-2 right-2 bg-slate-900/80 backdrop-blur text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">
+                <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>放大
+              </span>
+            </div>
+            <div class="p-3.5 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="font-bold text-white text-sm flex items-center gap-1.5">
+                  <i class="fa-solid fa-music text-amber-400"></i> 高雄流行音樂中心 (愛河灣)
+                </h4>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">地標型蜂巢海浪建築，傍晚時分沿著愛河灣漫步，看夕陽落入海平面與亮起絢麗光軌的港灣夜景。</p>
+              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=高雄流行音樂中心" target="_blank" class="mt-3 text-xs text-amber-400 font-semibold hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-location-dot"></i> Google 地圖導航
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 5: 棧貳庫 KW2 -->
+          <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-lg flex flex-col group">
+            <div class="relative h-44 overflow-hidden bg-slate-950 cursor-pointer" onclick="openModal('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjc1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE0NSIgZmlsbD0idXJsKCN3YXRlcikiLz4KPHJlY3QgeD0iNTUiIHk9IjIyNSIgd2lkdGg9IjY5MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNiNDUzMDkiLz48cmVjdCB4PSI3NSIgeT0iMjQ1IiB3aWR0aD0iNjUwIiBoZWlnaHQ9IjY1IiBmaWxsPSIjZDk3NzA2Ii8+CjxwYXRoIGQ9Ik0xMDAgMjU1IEg3MDAiIHN0cm9rZT0iI2ZkZTY4YSIgc3Ryb2tlLXdpZHRoPSI2IiBvcGFjaXR5PSIuNyIvPgo8Y2lyY2xlIGN4PSI1ODUiIGN5PSIyNjUiIHI9IjYwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmOGZhZmMiIHN0cm9rZS13aWR0aD0iMTAiLz48Y2lyY2xlIGN4PSI1ODUiIGN5PSIyNjUiIHI9IjEyIiBmaWxsPSIjZjU5ZTBiIi8+CjxwYXRoIGQ9Ik0wIDM2NSBRMTYwIDM0MCAzMjAgMzY1IFQ2NDAgMzY1IFQ4MDAgMzY1IiBmaWxsPSJub25lIiBzdHJva2U9IiM2N2U4ZjkiIHN0cm9rZS13aWR0aD0iNCIgb3BhY2l0eT0iLjUiLz4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MjAiIGZpbGw9InJnYmEoMCwwLDAsLjA4KSIvPgo8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI3NTAiIGhlaWdodD0iNzAiIHJ4PSIxMiIgZmlsbD0iIzAyMDYxNyIgb3BhY2l0eT0iLjcyIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1OCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiPuajp+iys+W6qyBLVzI8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPueZvuW5tOWAieW6qyDDlyDmtbfmma/ml4vovYnmnKjppqw8L3RleHQ+Cjwvc3ZnPg==', '棧貳庫 KW2 ＆ 駁二大義倉庫')">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjc1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE0NSIgZmlsbD0idXJsKCN3YXRlcikiLz4KPHJlY3QgeD0iNTUiIHk9IjIyNSIgd2lkdGg9IjY5MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNiNDUzMDkiLz48cmVjdCB4PSI3NSIgeT0iMjQ1IiB3aWR0aD0iNjUwIiBoZWlnaHQ9IjY1IiBmaWxsPSIjZDk3NzA2Ii8+CjxwYXRoIGQ9Ik0xMDAgMjU1IEg3MDAiIHN0cm9rZT0iI2ZkZTY4YSIgc3Ryb2tlLXdpZHRoPSI2IiBvcGFjaXR5PSIuNyIvPgo8Y2lyY2xlIGN4PSI1ODUiIGN5PSIyNjUiIHI9IjYwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmOGZhZmMiIHN0cm9rZS13aWR0aD0iMTAiLz48Y2lyY2xlIGN4PSI1ODUiIGN5PSIyNjUiIHI9IjEyIiBmaWxsPSIjZjU5ZTBiIi8+CjxwYXRoIGQ9Ik0wIDM2NSBRMTYwIDM0MCAzMjAgMzY1IFQ2NDAgMzY1IFQ4MDAgMzY1IiBmaWxsPSJub25lIiBzdHJva2U9IiM2N2U4ZjkiIHN0cm9rZS13aWR0aD0iNCIgb3BhY2l0eT0iLjUiLz4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MjAiIGZpbGw9InJnYmEoMCwwLDAsLjA4KSIvPgo8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI3NTAiIGhlaWdodD0iNzAiIHJ4PSIxMiIgZmlsbD0iIzAyMDYxNyIgb3BhY2l0eT0iLjcyIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1OCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiPuajp+iys+W6qyBLVzI8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPueZvuW5tOWAieW6qyDDlyDmtbfmma/ml4vovYnmnKjppqw8L3RleHQ+Cjwvc3ZnPg==" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="駁二大義倉庫人文街景">
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition"></div>
+              <span class="absolute top-2 right-2 bg-slate-900/80 backdrop-blur text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">
+                <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>放大
+              </span>
+            </div>
+            <div class="p-3.5 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="font-bold text-white text-sm flex items-center gap-1.5">
+                  <i class="fa-solid fa-store text-amber-400"></i> 棧貳庫 KW2 ＆ 駁二大義倉庫
+                </h4>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">百年臨港倉庫活化，擁有純白夢幻海景旋轉木馬。臨近哈瑪星鐵道文化園區，保留大片綠地與舊軌道。</p>
+              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=棧貳庫KW2" target="_blank" class="mt-3 text-xs text-amber-400 font-semibold hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-location-dot"></i> Google 地圖導航
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 6: 城市商旅 -->
+          <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-lg flex flex-col group">
+            <div class="relative h-44 overflow-hidden bg-slate-950 cursor-pointer" onclick="openModal('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMzAwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iIzExMTgyNyIvPgo8cmVjdCB4PSIxOTAiIHk9IjEyNSIgd2lkdGg9IjQyMCIgaGVpZ2h0PSIyMzAiIHJ4PSI4IiBmaWxsPSIjY2JkNWUxIi8+CjxyZWN0IHg9IjIyNSIgeT0iMTYwIiB3aWR0aD0iMzUwIiBoZWlnaHQ9IjE2MCIgZmlsbD0iIzMzNDE1NSIvPgo8cmVjdCB4PSIyNTUiIHk9IjE4NSIgd2lkdGg9Ijc1IiBoZWlnaHQ9IjcwIiBmaWxsPSIjZmJiZjI0Ii8+PHJlY3QgeD0iMzY1IiB5PSIxODUiIHdpZHRoPSI3NSIgaGVpZ2h0PSI3MCIgZmlsbD0iI2ZiYmYyNCIvPjxyZWN0IHg9IjQ3NSIgeT0iMTg1IiB3aWR0aD0iNzUiIGhlaWdodD0iNzAiIGZpbGw9IiNmYmJmMjQiLz4KPHJlY3QgeD0iMzQ1IiB5PSIyNzUiIHdpZHRoPSIxMTAiIGhlaWdodD0iODAiIGZpbGw9IiM2NDc0OGIiLz4KPHBhdGggZD0iTTE1MCAzNTUgSDY1MCIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjEwIi8+CjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiBmaWxsPSJyZ2JhKDAsMCwwLC4wOCkiLz4KPHJlY3QgeD0iMjUiIHk9IjI1IiB3aWR0aD0iNzUwIiBoZWlnaHQ9IjcwIiByeD0iMTIiIGZpbGw9IiMwMjA2MTciIG9wYWNpdHk9Ii43MiIvPgo8dGV4dCB4PSI1MCIgeT0iNTgiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI1IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIj7ln47luILllYbml4XvvI3pq5jpm4Tpp4HkuozppKg8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPumngeS6jOaXgSDDlyDlt6Xmpa3poqjml4Xlupc8L3RleHQ+Cjwvc3ZnPg==', '城市商旅 - 高雄駁二館')">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMzAwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iIzExMTgyNyIvPgo8cmVjdCB4PSIxOTAiIHk9IjEyNSIgd2lkdGg9IjQyMCIgaGVpZ2h0PSIyMzAiIHJ4PSI4IiBmaWxsPSIjY2JkNWUxIi8+CjxyZWN0IHg9IjIyNSIgeT0iMTYwIiB3aWR0aD0iMzUwIiBoZWlnaHQ9IjE2MCIgZmlsbD0iIzMzNDE1NSIvPgo8cmVjdCB4PSIyNTUiIHk9IjE4NSIgd2lkdGg9Ijc1IiBoZWlnaHQ9IjcwIiBmaWxsPSIjZmJiZjI0Ii8+PHJlY3QgeD0iMzY1IiB5PSIxODUiIHdpZHRoPSI3NSIgaGVpZ2h0PSI3MCIgZmlsbD0iI2ZiYmYyNCIvPjxyZWN0IHg9IjQ3NSIgeT0iMTg1IiB3aWR0aD0iNzUiIGhlaWdodD0iNzAiIGZpbGw9IiNmYmJmMjQiLz4KPHJlY3QgeD0iMzQ1IiB5PSIyNzUiIHdpZHRoPSIxMTAiIGhlaWdodD0iODAiIGZpbGw9IiM2NDc0OGIiLz4KPHBhdGggZD0iTTE1MCAzNTUgSDY1MCIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjEwIi8+CjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiBmaWxsPSJyZ2JhKDAsMCwwLC4wOCkiLz4KPHJlY3QgeD0iMjUiIHk9IjI1IiB3aWR0aD0iNzUwIiBoZWlnaHQ9IjcwIiByeD0iMTIiIGZpbGw9IiMwMjA2MTciIG9wYWNpdHk9Ii43MiIvPgo8dGV4dCB4PSI1MCIgeT0iNTgiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI1IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIj7ln47luILllYbml4XvvI3pq5jpm4Tpp4HkuozppKg8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPumngeS6jOaXgSDDlyDlt6Xmpa3poqjml4Xlupc8L3RleHQ+Cjwvc3ZnPg==" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="城市商旅大廳">
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition"></div>
+              <span class="absolute top-2 right-2 bg-slate-900/80 backdrop-blur text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">
+                <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>放大
+              </span>
+            </div>
+            <div class="p-3.5 flex-1 flex flex-col justify-between">
+              <div>
+                <h4 class="font-bold text-white text-sm flex items-center gap-1.5">
+                  <i class="fa-solid fa-hotel text-amber-400"></i> 城市商旅 - 高雄駁二館
+                </h4>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">地點極佳！內部為溫馨工業風格。鄰近輕軌大義街站與捷運鹽埕埔站，走出飯店即抵駁二大義倉庫。</p>
+              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=城市商旅+高雄駁二館" target="_blank" class="mt-3 text-xs text-amber-400 font-semibold hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-location-dot"></i> Google 地圖導航
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Right Column: Interactive Leaflet Map & Smart Tips (5 cols) -->
+    <section class="lg:col-span-5 space-y-6">
+
+      <!-- Leaflet Interactive Map Card -->
+      <div class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+        <div class="p-4 bg-slate-800/90 border-b border-slate-700 flex justify-between items-center">
+          <div>
+            <h3 class="font-bold text-white text-base flex items-center gap-2">
+              <i class="fa-solid fa-map-marked-alt text-teal-400"></i> 行程動線地圖
+            </h3>
+            <p class="text-xs text-slate-400">點擊地標可看相片與路線導航</p>
+          </div>
+          <div class="flex gap-1 text-xs">
+            <button onclick="filterMap('all')" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-white rounded font-medium">全部</button>
+            <button onclick="filterMap(1)" class="px-2 py-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 rounded font-medium border border-amber-500/30">Day 1</button>
+            <button onclick="filterMap(2)" class="px-2 py-1 bg-teal-500/20 text-teal-300 hover:bg-teal-500/30 rounded font-medium border border-teal-500/30">Day 2</button>
+          </div>
+        </div>
+
+        <!-- Map Container -->
+        <div id="map" class="w-full h-80 sm:h-96 bg-slate-950 z-0"></div>
+
+        <div class="p-3 bg-slate-800/80 border-t border-slate-700/60 text-xs text-slate-400 flex justify-between items-center">
+          <span><i class="fa-solid fa-circle text-amber-500 text-[10px] mr-1"></i>Day 1 港灣動線</span>
+          <span><i class="fa-solid fa-circle text-teal-400 text-[10px] mr-1"></i>Day 2 衛武營動線</span>
+        </div>
+      </div>
+
+      <!-- Luggage & Travel Tips Box -->
+      <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-5 space-y-4 shadow-xl">
+        <h3 class="font-bold text-amber-400 text-base flex items-center gap-2 border-b border-slate-700 pb-2">
+          <i class="fa-solid fa-lightbulb"></i> 聰明旅遊貼心小指引
+        </h3>
+
+        <div class="space-y-3 text-xs text-slate-300">
+          <div class="flex items-start gap-2.5">
+            <div class="bg-amber-500/20 text-amber-400 p-1.5 rounded-lg shrink-0 mt-0.5">
+              <i class="fa-solid fa-suitcase"></i>
+            </div>
+            <div>
+              <strong class="text-white block font-semibold">Day 2 行李寄放神技巧：</strong>
+              8/22 退房後先寄放飯店，下午看戲前往衛武營前回飯店取行李。**衛武營場館內備有大型寄物櫃與行李處置專區**，直接帶行李去衛武營，看完劇即可直接搭捷運赴左營高鐵站，不用折返駁二！
+            </div>
+          </div>
+
+          <div class="flex items-start gap-2.5">
+            <div class="bg-teal-500/20 text-teal-400 p-1.5 rounded-lg shrink-0 mt-0.5">
+              <i class="fa-solid fa-credit-card"></i>
+            </div>
+            <div>
+              <strong class="text-white block font-semibold">高雄大眾運輸輕鬆搭：</strong>
+              全程可使用一卡通、悠遊卡、TPASS，或直接刷信用卡感應搭乘高雄捷運與輕軌。
+            </div>
+          </div>
+
+          <div class="flex items-start gap-2.5">
+            <div class="bg-rose-500/20 text-rose-400 p-1.5 rounded-lg shrink-0 mt-0.5">
+              <i class="fa-solid fa-temperature-high"></i>
+            </div>
+            <div>
+              <strong class="text-white block font-semibold">夏日防曬與空調保暖：</strong>
+              8 月高雄氣候較為炎熱，日間戶外走動請補充水分；衛武營國家藝術文化中心劇院內部與高鐵商務車廂冷氣充足，建議帶件薄外套備用。
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Image Lightbox Modal -->
+  <div id="image-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="closeModal()">
+    <div class="relative max-w-4xl w-full bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      <div class="p-3 bg-slate-800 border-b border-slate-700 flex justify-between items-center">
+        <h3 id="modal-title" class="font-bold text-white text-sm sm:text-base">圖片預覽</h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white px-2 py-1 rounded-lg">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="p-2 bg-black flex justify-center items-center max-h-[75vh]">
+        <img id="modal-img" src="" class="max-h-[70vh] w-auto object-contain rounded-lg">
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="max-w-6xl mx-auto px-4 sm:px-8 mt-12 text-center text-xs text-slate-500">
+    <p>祝您 8/21 - 8/22 高雄藝文賞析之旅平安順心、觀影愉快！</p>
+  </footer>
+
+  <!-- Leaflet Map Script -->
+  <script>
+    let map, markers = [], polylineDay1, polylineDay2;
+
+    const spotsData = [
+      { id: 1, name: "高鐵左營站", day: [1, 2], lat: 22.6872, lng: 120.3090, desc: "09:43 到達 / 20:00 返程 (商務車廂 6車3D)", icon: "fa-train", img: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjc1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE0NSIgZmlsbD0iIzExMTgyNyIvPgo8cGF0aCBkPSJNMCAzMTUgUTE1MCAyNjAgMzAwIDMwMCBUNjAwIDI4MCBUODAwIDMwMCBWNDIwIEgwWiIgZmlsbD0iIzMzNDE1NSIvPgo8cGF0aCBkPSJNMTIwIDMzMCBRMjUwIDI1NSA0MDAgMjkwIFE1MjAgMjQ1IDY5MCAzMDUgTDczMCAzNDUgSDcwWiIgZmlsbD0iI2U1ZTdlYiIvPgo8cGF0aCBkPSJNMTUwIDMzMCBRMjgwIDI4MCA0MDAgMzEwIFE1MjAgMjc1IDY2MCAzMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzk0YTNiOCIgc3Ryb2tlLXdpZHRoPSI4Ii8+CjxyZWN0IHg9IjI3MCIgeT0iMzA1IiB3aWR0aD0iMjYwIiBoZWlnaHQ9IjExNSIgcng9IjIwIiBmaWxsPSIjZjhmYWZjIi8+CjxwYXRoIGQ9Ik0yNzAgMzMwIFE0MDAgMjQ1IDUzMCAzMzAiIGZpbGw9IiNlMmU4ZjAiLz4KPGNpcmNsZSBjeD0iMTE1IiBjeT0iMzY1IiByPSIzMCIgZmlsbD0iIzE2NjUzNCIvPjxjaXJjbGUgY3g9IjY4MCIgY3k9IjM2MCIgcj0iMzgiIGZpbGw9IiMxNjY1MzQiLz4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MjAiIGZpbGw9InJnYmEoMCwwLDAsLjA4KSIvPgo8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI3NTAiIGhlaWdodD0iNzAiIHJ4PSIxMiIgZmlsbD0iIzAyMDYxNyIgb3BhY2l0eT0iLjcyIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1OCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiPuihm+atpueHn+Wci+WutuiXneihk+aWh+WMluS4reW/gzwvdGV4dD4KPHRleHQgeD0iNTAiIHk9IjgyIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNSIgZmlsbD0iI2NiZDVlMSI+55m96Imy6Z+z5rWq5bu656+JIMOXIOamleaoueW7o+WgtDwvdGV4dD4KPC9zdmc+" },
+      { id: 2, name: "城市商旅 - 高雄駁二館", day: [1, 2], lat: 22.6190, lng: 120.2828, desc: "8/21 住宿飯店，鄰近駁二大義倉庫與輕軌站", icon: "fa-hotel", img: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMzAwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iIzExMTgyNyIvPgo8cmVjdCB4PSIxOTAiIHk9IjEyNSIgd2lkdGg9IjQyMCIgaGVpZ2h0PSIyMzAiIHJ4PSI4IiBmaWxsPSIjY2JkNWUxIi8+CjxyZWN0IHg9IjIyNSIgeT0iMTYwIiB3aWR0aD0iMzUwIiBoZWlnaHQ9IjE2MCIgZmlsbD0iIzMzNDE1NSIvPgo8cmVjdCB4PSIyNTUiIHk9IjE4NSIgd2lkdGg9Ijc1IiBoZWlnaHQ9IjcwIiBmaWxsPSIjZmJiZjI0Ii8+PHJlY3QgeD0iMzY1IiB5PSIxODUiIHdpZHRoPSI3NSIgaGVpZ2h0PSI3MCIgZmlsbD0iI2ZiYmYyNCIvPjxyZWN0IHg9IjQ3NSIgeT0iMTg1IiB3aWR0aD0iNzUiIGhlaWdodD0iNzAiIGZpbGw9IiNmYmJmMjQiLz4KPHJlY3QgeD0iMzQ1IiB5PSIyNzUiIHdpZHRoPSIxMTAiIGhlaWdodD0iODAiIGZpbGw9IiM2NDc0OGIiLz4KPHBhdGggZD0iTTE1MCAzNTUgSDY1MCIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjEwIi8+CjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiBmaWxsPSJyZ2JhKDAsMCwwLC4wOCkiLz4KPHJlY3QgeD0iMjUiIHk9IjI1IiB3aWR0aD0iNzUwIiBoZWlnaHQ9IjcwIiByeD0iMTIiIGZpbGw9IiMwMjA2MTciIG9wYWNpdHk9Ii43MiIvPgo8dGV4dCB4PSI1MCIgeT0iNTgiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI1IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIj7ln47luILllYbml4XvvI3pq5jpm4Tpp4HkuozppKg8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPumngeS6jOaXgSDDlyDlt6Xmpa3poqjml4Xlupc8L3RleHQ+Cjwvc3ZnPg==" },
+      { id: 3, name: "鹽埕區美食 (鴨肉珍)", day: [1, 2], lat: 22.6253, lng: 120.2822, desc: "必吃65年老店鴨肉飯、下水湯與樺達奶茶", icon: "fa-utensils", img: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjcwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iIzQ1MWEwMyIvPgo8cmVjdCB4PSI4MCIgeT0iMTUwIiB3aWR0aD0iNjQwIiBoZWlnaHQ9IjE1NSIgcng9IjEyIiBmaWxsPSIjZmVmM2M3Ii8+CjxyZWN0IHg9IjExMCIgeT0iMTc1IiB3aWR0aD0iNTgwIiBoZWlnaHQ9IjQ1IiBmaWxsPSIjOTkxYjFiIi8+PHJlY3QgeD0iMTEwIiB5PSIyMzAiIHdpZHRoPSI1ODAiIGhlaWdodD0iNTUiIGZpbGw9IiM3ODM1MGYiLz4KPHRleHQgeD0iNDAwIiB5PSIyMDciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSJ3aGl0ZSI+6bSoIOiCiSDnj408L3RleHQ+CjxlbGxpcHNlIGN4PSI0MDAiIGN5PSIzNDAiIHJ4PSIxMTUiIHJ5PSIzNSIgZmlsbD0iI2Q5NzcwNiIvPjxlbGxpcHNlIGN4PSI0MDAiIGN5PSIzMjgiIHJ4PSIxMDUiIHJ5PSIzMCIgZmlsbD0iI2ZlZjNjNyIvPgo8cGF0aCBkPSJNMzM1IDMyMCBRNDAwIDI4MCA0NjUgMzIwIFE0NTAgMzQ1IDQwMCAzNTAgUTM1MCAzNDUgMzM1IDMyMCIgZmlsbD0iIzkyNDAwZSIvPgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0icmdiYSgwLDAsMCwuMDgpIi8+CjxyZWN0IHg9IjI1IiB5PSIyNSIgd2lkdGg9Ijc1MCIgaGVpZ2h0PSI3MCIgcng9IjEyIiBmaWxsPSIjMDIwNjE3IiBvcGFjaXR5PSIuNzIiLz4KPHRleHQgeD0iNTAiIHk9IjU4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2ZmZiI+6bm95Z+V5Y2A6ICB5a2X6Jmf576O6aOfPC90ZXh0Pgo8dGV4dCB4PSI1MCIgeT0iODIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE1IiBmaWxsPSIjY2JkNWUxIj7ptKjogonpo68gw5cg5Y+k5pep5ZGz6KGX5pmvPC90ZXh0Pgo8L3N2Zz4=" },
+      { id: 4, name: "駁二藝術特區 ＆ 大港橋", day: [1], lat: 22.6186, lng: 120.2856, desc: "15:00 觀賞大港橋旋轉開合秀、逛文創倉庫", icon: "fa-camera", img: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjg1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjEzNSIgZmlsbD0idXJsKCN3YXRlcikiLz4KPHBhdGggZD0iTTAgMzUwIFExMDAgMzMwIDIwMCAzNTAgVDQwMCAzNTAgVDYwMCAzNTAgVDgwMCAzNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzY3ZThmOSIgc3Ryb2tlLXdpZHRoPSIzIiBvcGFjaXR5PSIuNSIvPgo8cGF0aCBkPSJNMTM1IDMxMCBMNjY1IDMxMCIgc3Ryb2tlPSIjZjhmYWZjIiBzdHJva2Utd2lkdGg9IjE2Ii8+CjxwYXRoIGQ9Ik0xMzUgMzEwIEwyNTAgMzEwIiBzdHJva2U9IiNmNTllMGIiIHN0cm9rZS13aWR0aD0iMTgiLz48cGF0aCBkPSJNNTUwIDMxMCBMNjY1IDMxMCIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjE4Ii8+CjxwYXRoIGQ9Ik0xNTAgMzEwIEwyNTAgMzkwIE02NTAgMzEwIEw1NTAgMzkwIiBzdHJva2U9IiNjYmQ1ZTEiIHN0cm9rZS13aWR0aD0iOCIvPgo8cmVjdCB4PSI0MCIgeT0iMjQ1IiB3aWR0aD0iMTAwIiBoZWlnaHQ9Ijc1IiBmaWxsPSIjN2MyZDEyIi8+PHJlY3QgeD0iMTUwIiB5PSIyMzAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI5MCIgZmlsbD0iIzlhMzQxMiIvPjxyZWN0IHg9IjI0NSIgeT0iMjUwIiB3aWR0aD0iOTAiIGhlaWdodD0iNzAiIGZpbGw9IiM3ODM1MGYiLz4KPGNpcmNsZSBjeD0iOTUiIGN5PSIyNDAiIHI9IjI1IiBmaWxsPSIjMjJjNTVlIi8+PGNpcmNsZSBjeD0iMjg1IiBjeT0iMjQyIiByPSIyOCIgZmlsbD0iIzE2YTM0YSIvPgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0icmdiYSgwLDAsMCwuMDgpIi8+CjxyZWN0IHg9IjI1IiB5PSIyNSIgd2lkdGg9Ijc1MCIgaGVpZ2h0PSI3MCIgcng9IjEyIiBmaWxsPSIjMDIwNjE3IiBvcGFjaXR5PSIuNzIiLz4KPHRleHQgeD0iNTAiIHk9IjU4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2ZmZiI+6aeB5LqM6Jed6KGT54m55Y2AIO+8hiDlpKfmuK/mqYs8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPua4r+eBo+WAieW6qyDDlyDmsLTlubPml4vovYnmqYs8L3RleHQ+Cjwvc3ZnPg==" },
+      { id: 5, name: "高雄流行音樂中心", day: [1], lat: 22.6193, lng: 120.2932, desc: "漫步愛河灣音浪塔，欣賞黃昏港灣夕陽與夜景", icon: "fa-sun", img: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjc1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE0NSIgZmlsbD0idXJsKCN3YXRlcikiLz4KPHBhdGggZD0iTTEwMCAzMzAgTDE5MCAyMjAgTDMwMCAzMzAgTDQxMCAxOTAgTDUyMCAzMzAgTDYzMCAyMjAgTDcyMCAzMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y4ZmFmYyIgc3Ryb2tlLXdpZHRoPSIyMiIvPgo8cGF0aCBkPSJNMTAwIDMzMCBMMTkwIDIyMCBMMzAwIDMzMCBMNDEwIDE5MCBMNTIwIDMzMCBMNjMwIDIyMCBMNzIwIDMzMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjU5ZTBiIiBzdHJva2Utd2lkdGg9IjUiLz4KPGNpcmNsZSBjeD0iNDAwIiBjeT0iMzUwIiByPSI3IiBmaWxsPSIjZmVmM2M3Ii8+PGNpcmNsZSBjeD0iMzAwIiBjeT0iMzcwIiByPSI1IiBmaWxsPSIjZmVmM2M3Ii8+PGNpcmNsZSBjeD0iNTIwIiBjeT0iMzY1IiByPSI2IiBmaWxsPSIjZmVmM2M3Ii8+CjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiBmaWxsPSJyZ2JhKDAsMCwwLC4wOCkiLz4KPHJlY3QgeD0iMjUiIHk9IjI1IiB3aWR0aD0iNzUwIiBoZWlnaHQ9IjcwIiByeD0iMTIiIGZpbGw9IiMwMjA2MTciIG9wYWNpdHk9Ii43MiIvPgo8dGV4dCB4PSI1MCIgeT0iNTgiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjI1IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIj7pq5jpm4TmtYHooYzpn7PmqILkuK3lv4M8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPuaEm+ays+eBoyDDlyDpu4PmmI/muK/mma88L3RleHQ+Cjwvc3ZnPg==" },
+      { id: 6, name: "棧貳庫 KW2 ＆ 大義倉庫", day: [2], lat: 22.6158, lng: 120.2762, desc: "吹海風看舊鐵道、純白海景旋轉木馬與駁二街景", icon: "fa-anchor", img: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjc1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE0NSIgZmlsbD0idXJsKCN3YXRlcikiLz4KPHJlY3QgeD0iNTUiIHk9IjIyNSIgd2lkdGg9IjY5MCIgaGVpZ2h0PSIxMDUiIGZpbGw9IiNiNDUzMDkiLz48cmVjdCB4PSI3NSIgeT0iMjQ1IiB3aWR0aD0iNjUwIiBoZWlnaHQ9IjY1IiBmaWxsPSIjZDk3NzA2Ii8+CjxwYXRoIGQ9Ik0xMDAgMjU1IEg3MDAiIHN0cm9rZT0iI2ZkZTY4YSIgc3Ryb2tlLXdpZHRoPSI2IiBvcGFjaXR5PSIuNyIvPgo8Y2lyY2xlIGN4PSI1ODUiIGN5PSIyNjUiIHI9IjYwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmOGZhZmMiIHN0cm9rZS13aWR0aD0iMTAiLz48Y2lyY2xlIGN4PSI1ODUiIGN5PSIyNjUiIHI9IjEyIiBmaWxsPSIjZjU5ZTBiIi8+CjxwYXRoIGQ9Ik0wIDM2NSBRMTYwIDM0MCAzMjAgMzY1IFQ2NDAgMzY1IFQ4MDAgMzY1IiBmaWxsPSJub25lIiBzdHJva2U9IiM2N2U4ZjkiIHN0cm9rZS13aWR0aD0iNCIgb3BhY2l0eT0iLjUiLz4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MjAiIGZpbGw9InJnYmEoMCwwLDAsLjA4KSIvPgo8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI3NTAiIGhlaWdodD0iNzAiIHJ4PSIxMiIgZmlsbD0iIzAyMDYxNyIgb3BhY2l0eT0iLjcyIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1OCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiPuajp+iys+W6qyBLVzI8L3RleHQ+Cjx0ZXh0IHg9IjUwIiB5PSI4MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiNjYmQ1ZTEiPueZvuW5tOWAieW6qyDDlyDmtbfmma/ml4vovYnmnKjppqw8L3RleHQ+Cjwvc3ZnPg==" },
+      { id: 7, name: "衛武營國家藝術文化中心", day: [2], lat: 22.6247, lng: 120.3432, desc: "8/22 14:30 舞台劇《都更男女》觀賞地", icon: "fa-masks-theater", img: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgODAwIDQyMCI+CjxkZWZzPgogPGxpbmVhckdyYWRpZW50IGlkPSJza3kiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYjE4MzAiLz48c3RvcCBvZmZzZXQ9IjAuNTgiIHN0b3AtY29sb3I9IiMxNTVlNzUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNTllMGIiLz48L2xpbmVhckdyYWRpZW50PgogPGxpbmVhckdyYWRpZW50IGlkPSJ3YXRlciIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPjxzdG9wIHN0b3AtY29sb3I9IiMwODMzNDQiLz48c3RvcCBvZmZzZXQ9Ii41IiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMTY0ZTYzIi8+PC9saW5lYXJHcmFkaWVudD4KIDxmaWx0ZXIgaWQ9Imdsb3ciPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjciLz48L2ZpbHRlcj4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQyMCIgZmlsbD0idXJsKCNza3kpIi8+CjxjaXJjbGUgY3g9IjY1MCIgY3k9IjEzNSIgcj0iNTgiIGZpbGw9IiNmZGU2OGEiIG9wYWNpdHk9Ii45Ii8+PGNpcmNsZSBjeD0iNjUwIiBjeT0iMTM1IiByPSI4NSIgZmlsbD0iI2ZkZTY4YSIgb3BhY2l0eT0iLjE1IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KPHJlY3QgeT0iMjc1IiB3aWR0aD0iODAwIiBoZWlnaHQ9IjE0NSIgZmlsbD0iIzExMTgyNyIvPgo8cGF0aCBkPSJNMCAzMTUgUTE1MCAyNjAgMzAwIDMwMCBUNjAwIDI4MCBUODAwIDMwMCBWNDIwIEgwWiIgZmlsbD0iIzMzNDE1NSIvPgo8cGF0aCBkPSJNMTIwIDMzMCBRMjUwIDI1NSA0MDAgMjkwIFE1MjAgMjQ1IDY5MCAzMDUgTDczMCAzNDUgSDcwWiIgZmlsbD0iI2U1ZTdlYiIvPgo8cGF0aCBkPSJNMTUwIDMzMCBRMjgwIDI4MCA0MDAgMzEwIFE1MjAgMjc1IDY2MCAzMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzk0YTNiOCIgc3Ryb2tlLXdpZHRoPSI4Ii8+CjxyZWN0IHg9IjI3MCIgeT0iMzA1IiB3aWR0aD0iMjYwIiBoZWlnaHQ9IjExNSIgcng9IjIwIiBmaWxsPSIjZjhmYWZjIi8+CjxwYXRoIGQ9Ik0yNzAgMzMwIFE0MDAgMjQ1IDUzMCAzMzAiIGZpbGw9IiNlMmU4ZjAiLz4KPGNpcmNsZSBjeD0iMTE1IiBjeT0iMzY1IiByPSIzMCIgZmlsbD0iIzE2NjUzNCIvPjxjaXJjbGUgY3g9IjY4MCIgY3k9IjM2MCIgcj0iMzgiIGZpbGw9IiMxNjY1MzQiLz4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI0MjAiIGZpbGw9InJnYmEoMCwwLDAsLjA4KSIvPgo8cmVjdCB4PSIyNSIgeT0iMjUiIHdpZHRoPSI3NTAiIGhlaWdodD0iNzAiIHJ4PSIxMiIgZmlsbD0iIzAyMDYxNyIgb3BhY2l0eT0iLjcyIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1OCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjUiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiPuihm+atpueHn+Wci+WutuiXneihk+aWh+WMluS4reW/gzwvdGV4dD4KPHRleHQgeD0iNTAiIHk9IjgyIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNSIgZmlsbD0iI2NiZDVlMSI+55m96Imy6Z+z5rWq5bu656+JIMOXIOamleaoueW7o+WgtDwvdGV4dD4KPC9zdmc+" }
+    ];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize map centered at Kaohsiung Harbor area
+      map = L.map('map').setView([22.6300, 120.3050], 12);
+
+      // Add OpenStreetMap Tile Layer
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(map);
+
+      // Render Markers
+      spotsData.forEach(spot => {
+        const markerColor = spot.day.includes(1) && !spot.day.includes(2) ? '#f59e0b' : (spot.day.includes(2) && !spot.day.includes(1) ? '#0d9488' : '#e11d48');
+
+        // Custom HTML Marker Icon
+        const customIcon = L.divIcon({
+          className: 'custom-leaflet-icon',
+          html: `<div style="background-color: ${markerColor}; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                   <i class="fa-solid ${spot.icon} text-xs"></i>
+                 </div>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        });
+
+        const popupContent = `
+          <div style="width: 220px;">
+            <img src="${spot.img}" style="width: 100%; height: 110px; object-fit: cover; display: block;">
+            <div style="padding: 10px;">
+              <strong style="font-size: 13px; color: #f8fafc; display: block; margin-bottom: 4px;">${spot.name}</strong>
+              <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0; leading-height: 1.3;">${spot.desc}</p>
+              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name)}" target="_blank" style="display: block; text-align: center; background-color: #0d9488; color: white; padding: 5px 8px; border-radius: 6px; font-size: 11px; text-decoration: none; font-weight: bold;">
+                <i class="fa-solid fa-location-arrow"></i> Google 地圖導航
+              </a>
+            </div>
+          </div>
+        `;
+
+        const marker = L.marker([spot.lat, spot.lng], { icon: customIcon }).addTo(map).bindPopup(popupContent);
+        marker.day = spot.day;
+        markers.push(marker);
+      });
+
+      // Draw Route Lines
+      const day1Coords = [
+        [22.6872, 120.3090], // 高鐵左營
+        [22.6190, 120.2828], // 城市商旅
+        [22.6253, 120.2822], // 鹽埕美食
+        [22.6186, 120.2856], // 大港橋
+        [22.6193, 120.2932]  // 高流
+      ];
+
+      const day2Coords = [
+        [22.6190, 120.2828], // 城市商旅
+        [22.6158, 120.2762], // 棧貳庫
+        [22.6247, 120.3432], // 衛武營
+        [22.6872, 120.3090]  // 高鐵左營
+      ];
+
+      polylineDay1 = L.polyline(day1Coords, { color: '#f59e0b', weight: 4, opacity: 0.7, dashArray: '6, 8' }).addTo(map);
+      polylineDay2 = L.polyline(day2Coords, { color: '#0d9488', weight: 4, opacity: 0.7, dashArray: '6, 8' }).addTo(map);
+    });
+
+    // Filter Map View function
+    function filterMap(day) {
+      if (day === 'all') {
+        markers.forEach(m => map.addLayer(m));
+        map.addLayer(polylineDay1);
+        map.addLayer(polylineDay2);
+        map.fitBounds([
+          [22.6158, 120.2762],
+          [22.6872, 120.3432]
+        ], { padding: [30, 30] });
+      } else if (day === 1) {
+        markers.forEach(m => m.day.includes(1) ? map.addLayer(m) : map.removeLayer(m));
+        map.addLayer(polylineDay1);
+        map.removeLayer(polylineDay2);
+        map.fitBounds(polylineDay1.getBounds(), { padding: [30, 30] });
+      } else if (day === 2) {
+        markers.forEach(m => m.day.includes(2) ? map.addLayer(m) : map.removeLayer(m));
+        map.removeLayer(polylineDay1);
+        map.addLayer(polylineDay2);
+        map.fitBounds(polylineDay2.getBounds(), { padding: [30, 30] });
+      }
+    }
+
+    // Switch Tabs function
+    function switchDay(day) {
+      const btn1 = document.getElementById('tab-day1');
+      const btn2 = document.getElementById('tab-day2');
+      const btnSpots = document.getElementById('tab-spots');
+
+      const content1 = document.getElementById('content-day1');
+      const content2 = document.getElementById('content-day2');
+      const contentSpots = document.getElementById('content-spots');
+
+      // Reset Styles
+      [btn1, btn2, btnSpots].forEach(b => {
+        b.className = "flex-1 py-3 rounded-xl text-center transition duration-200 text-slate-400 hover:text-white";
+      });
+
+      content1.classList.add('hidden');
+      content2.classList.add('hidden');
+      contentSpots.classList.add('hidden');
+
+      if (day === 1) {
+        btn1.className = "flex-1 py-3 rounded-xl text-center transition duration-200 bg-amber-500 text-slate-950 font-bold shadow-md";
+        content1.classList.remove('hidden');
+        filterMap(1);
+      } else if (day === 2) {
+        btn2.className = "flex-1 py-3 rounded-xl text-center transition duration-200 bg-teal-500 text-slate-950 font-bold shadow-md";
+        content2.classList.remove('hidden');
+        filterMap(2);
+      } else if (day === 'spots') {
+        btnSpots.className = "flex-1 py-3 rounded-xl text-center transition duration-200 bg-rose-500 text-white font-bold shadow-md";
+        contentSpots.classList.remove('hidden');
+        filterMap('all');
+      }
+    }
+
+    // Modal Image Lightbox
+    function openModal(imgSrc, title) {
+      document.getElementById('modal-img').src = imgSrc;
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('image-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('image-modal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苗栗台中三日遊 NotebookLM 專用提示詞與旅遊企劃</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #059669;
+            --accent: #d97706;
+            --bg-body: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: #ffffff;
+            padding: 32px 28px;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 28px;
+        }
+
+        header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        .badge-list {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            border-left: 5px solid var(--primary-light);
+            padding-left: 12px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .prompt-box-container {
+            position: relative;
+        }
+
+        .prompt-box {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: "Consolas", "Courier New", monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            line-height: 1.7;
+            border: 1px solid #334155;
+            max-height: 480px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .item-card {
+            background: #f8fafc;
+            border: 1px solid #edf2f7;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .item-card h4 {
+            font-size: 16px;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .item-card p, .item-card ul {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .item-card ul {
+            padding-left: 18px;
+            margin-top: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .highlight-text {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #3730a3;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>🎪 苗栗×台中 3天2夜 NotebookLM 旅遊企劃提示詞手冊</h1>
+        <p>專為 Google NotebookLM 設計之整合型導覽 Prompt，完美串接圖資來源與行程細節。</p>
+        <div class="badge-list">
+            <span class="badge">📅 2026/10/29 (四) - 10/31 (六)</span>
+            <span class="badge">⏳ 三天兩夜</span>
+            <span class="badge">🏨 麗寶福容 + 李方艾美</span>
+            <span class="badge">🗺️ 融合地圖與高景圖解析</span>
+        </div>
+    </header>
+
+    <!-- 提示詞核心區 -->
+    <section class="section-card">
+        <div class="section-title">
+            <span>📋 NotebookLM 專用提示詞 (Prompt)</span>
+            <button class="copy-btn" onclick="copyPrompt()">複製提示詞</button>
+        </div>
+        <p style="font-size: 14px; color: #64748b; margin-bottom: 12px;">
+            💡 <strong>使用指引：</strong>在 NotebookLM 新增記事本後，將「行程資訊」、「地圖圖檔」作為來源資料上傳，並在對話框貼上以下提示詞進行互動：
+        </p>
+        <div class="prompt-box-container">
+            <pre class="prompt-box" id="promptText">
+你是一位專業的台灣高端旅遊行程規劃顧問與貼身導遊。我已經在來源資料中提供了本次「三天兩夜苗栗與台中員工旅遊」的行程表，以及相關景點與地圖圖檔（包含：交通動線圖、麗寶樂園空拍高景圖、麗寶探索樂園全區導覽地圖、卓也小屋園區導覽地圖與實景照）。
+
+請嚴格基於所提供的來源資料與圖像細節，為我生成一份兼具深度、實用性與動線流暢度的「精準旅遊指南與問答架構」：
+
+【核心基本資訊統整】
+1. 何時出發：2026年10月29日（週四）至 10月31日（週六）。
+2. 去那裡：苗栗（功維敘隧道、卓也小屋）及台中（麗寶樂園探索世界、麗寶OUTLET、東豐綠廊自行車道、馬郭芋頭圓）。
+3. 停留時間與節奏：共計三天兩夜，請依據三天每日上午、下午、晚上的節奏規劃最舒適的停留建議。
+
+【飯店定位與周邊必購伴手禮／商品】
+1. 第一晚：台中麗寶福容大飯店
+   - 購物重點：緊鄰麗寶OUTLET MALL（義大利波托菲諾港風格水岸商場、摩天輪商圈）。必購精品折扣服飾、運動休閒品牌，以及OUTLET人氣烘焙與伴手禮（如日系名店甜點、萬益豆干等台中名產）。
+2. 第二晚：台中李方艾美酒店（位於台中火車站中區精華地段）
+   - 購物重點：宮原眼科／第四信用合作社（頂級土鳳梨酥、乳酪蛋糕、手工冰淇淋）、台中傳統老牌太陽餅（魏清海太陽餅、阿明師）、洪瑞珍三明治、綠川周邊文創新創商品。
+
+【重點景點深度介紹（結合所附圖檔與實景分析）】
+1. 麗寶樂園（探索世界與天空之夢摩天輪）：
+   - 圖資整合分析：
+     * 對照「麗寶大圖（高景圖）」：以全台最大「天空之夢」摩天輪為地標，右側為歐風建築OUTLET MALL與飯店群，具備開闊的景觀視野與步道腹地。
+     * 對照「麗寶樂園內地圖」：主要分為三大主題區，請提供不同客群的精準動線攻略：
+       - 【POPA歡樂王國】（左區）：適合親子/溫和派（如熊大的麗寶小鎮、旋轉木馬、採礦飛車）。
+       - 【魔法森林】（中區）：景觀與水上探險（叢林泛舟、陽光探戈、美樂地親子農場）。
+       - 【冒險天堂】（右區）：挑戰極限刺激（斷軌雲霄飛車「搶救地心」、音速迴旋、異次元風暴）。
+2. 卓也小屋（三義山林美學聚落）：
+   - 圖資整合分析：
+     * 對照「卓也小屋園區導覽圖」：沿著山勢水道而建，包含「藍染體驗工坊」、「天然染色生產基地」、「蔬食餐廳」、「牛角村/穀倉村」及「藍莊咖啡館」。
+     * 對照「卓也小屋實景照」：呈現水上落羽松木屋、煙波水霧、茅草竹造與傳統紅燈籠交織的聚落美學。
+     * 重點體驗：核心行程為「植物藍染DIY」，並推薦在水上木屋旁品嚐養生蔬食料理、欣賞如水墨畫般的中式林園美景。
+
+【請為我執行的輸出要求】
+- 彙整為結構清晰的 Markdown 格式，包含「每日行程亮點表」、「兩大景點必玩必拍Checklist」、「兩大飯店周邊掃貨購物攻略」。
+- 回答語氣專業、貼心且引人入勝，並準備好回答我關於各區域步行動線、設施限制與避開人潮的最佳時間點。</pre>
+        </div>
+    </section>
+
+    <!-- 企劃關鍵內容整理 (視覺化參考) -->
+    <section class="section-card">
+        <div class="section-title">
+            <span>🗺️ 行程關鍵時空與住宿概覽 (When & Where)</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">天數</th>
+                    <th style="width: 25%;">主要景點與活動</th>
+                    <th style="width: 25%;">當日入住飯店</th>
+                    <th style="width: 35%;">周邊必購名產與商場亮點</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Day 1</strong><br>(10/29 四)</td>
+                    <td>苗栗功維敘七彩隧道<br>卓也小屋（植物染 DIY）</td>
+                    <td><strong>台中麗寶福容大飯店</strong></td>
+                    <td>
+                        <span class="tag">麗寶OUTLET</span>精品服飾鞋包下殺特賣、全家旗艦伴手禮、台灣土特產名店街。
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Day 2</strong><br>(10/30 五)</td>
+                    <td>麗寶探索樂園全日暢遊<br>麗寶 OUTLET MALL 漫遊</td>
+                    <td><strong>台中李方艾美酒店</strong><br><small>(近台中舊火車站)</small></td>
+                    <td>
+                        <span class="tag">火車站商圈</span>宮原眼科（經典鳳梨酥、巧克力禮盒）、阿明師太陽餅、洪瑞珍招牌三明治。
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Day 3</strong><br>(10/31 六)</td>
+                    <td>東豐綠廊自行車輕旅<br>馬郭芋頭圓手作芋頭奶酪 DIY</td>
+                    <td>快樂返程歸賦</td>
+                    <td>
+                        <span class="tag">大甲/后里/豐原名產</span>大甲檳榔心芋頭加工品、義華鹹蛋糕、豐原廟東周邊名產。
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 兩大核心景點精華筆記 -->
+    <div class="grid-2">
+        <div class="item-card">
+            <h4>🎡 麗寶樂園度假區重點分析</h4>
+            <p><strong>結合高景圖與全區地圖觀點：</strong></p>
+            <ul>
+                <li><strong class="highlight-text">搶救地心 (No.46)：</strong>全球唯一斷軌式雲霄飛車，冒險天堂心臟地帶，刺激必玩首選。</li>
+                <li><strong class="highlight-text">熊大的麗寶小鎮 (No.1)：</strong>LINE FRIENDS 官方授權專區，位於 POPA 歡樂王國，沉浸式打卡拍照勝地。</li>
+                <li><strong class="highlight-text">叢林泛舟 (No.23)：</strong>魔法森林核心水上遊樂設施，清涼歡樂。</li>
+                <li><strong class="highlight-text">天空之夢摩天輪：</strong>由高景圖可見其宏偉視野，可眺望火炎山及台中盆地，日落與夜景皆壯觀。</li>
+            </ul>
+        </div>
+
+        <div class="item-card">
+            <h4>🌿 卓也小屋文化聚落重點分析</h4>
+            <p><strong>結合導覽地圖與水上實景觀點：</strong></p>
+            <ul>
+                <li><strong class="highlight-text">水上茅草落羽松包廂：</strong>實景呈現仙氣氤氳、倒映池水中的落羽松與茅草屋廊，三義最美聚落景致。</li>
+                <li><strong class="highlight-text">天然染色工坊：</strong>體驗台灣傳統「藍染工藝」，從紮染技巧到植物染液浸泡，客製個人專屬織品。</li>
+                <li><strong class="highlight-text">牛角村與穀倉村：</strong>地圖標註之特色穀倉造形民宿外觀，重現早期農業社會意象。</li>
+                <li><strong class="highlight-text">藍庄咖啡館 & 蔬食餐廳：</strong>以天然五色養生食材入菜，享受慢活綠意。</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function copyPrompt() {
+        const promptText = document.getElementById('promptText').innerText;
+        navigator.clipboard.writeText(promptText).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            btn.innerText = '已成功複製！';
+            btn.style.backgroundColor = '#059669';
+            setTimeout(() => {
+                btn.innerText = '複製提示詞';
+                btn.style.backgroundColor = '#2563eb';
+            }, 2500);
+        }).catch(err => {
+            alert('複製失敗，請手動全選複製。');
+        });
+    }
+</script>
+
+</body>
+</html>

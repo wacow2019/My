@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首爾感恩回饋季四日遊 - 旅遊情報手冊網頁</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #0d9488 100%);
+            --secondary-color: #0284c7;
+            --accent-color: #f59e0b;
+            --bg-light: #f8fafc;
+            --card-border: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg-light);
+            color: #334155;
+            line-height: 1.6;
+        }
+        .hero-banner {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            padding: 45px 20px 35px;
+            border-radius: 0 0 24px 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            margin-bottom: 35px;
+        }
+        .section-header {
+            border-left: 5px solid var(--secondary-color);
+            padding-left: 12px;
+            margin-bottom: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .flight-card {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            height: 100%;
+        }
+        .parking-box {
+            background: #fefce8;
+            border: 1px solid #fef08a;
+            border-radius: 14px;
+            padding: 22px;
+        }
+        .overview-map-card {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+        .overview-map-card img {
+            width: 100%;
+            max-height: 520px;
+            object-fit: contain;
+            background-color: #fffaf0;
+            display: block;
+        }
+        .day-row {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .day-badge {
+            background: var(--primary-color);
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .weather-pill {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .img-wrapper-cell {
+            width: 100%;
+            height: 240px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background: #e2e8f0;
+            position: relative;
+        }
+        .img-wrapper-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .img-wrapper-cell img:hover {
+            transform: scale(1.03);
+        }
+        .img-caption {
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .hotel-card {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            height: 100%;
+        }
+        .spot-card {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .spot-card .card-header-custom {
+            background: #f8fafc;
+            border-bottom: 1px solid #edf2f7;
+            padding: 12px 18px;
+            border-radius: 14px 14px 0 0;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .myeongdong-showcase {
+            background: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
+            border: 1px solid #fed7aa;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.04);
+        }
+        .myeongdong-feature-card {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            height: 100%;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+        }
+        .myeongdong-feature-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+        .myeongdong-feature-card .content {
+            padding: 18px 18px 20px;
+        }
+        .myeongdong-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            font-weight: 700;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+        .shop-box {
+            background: #fdf2f8;
+            border: 1px solid #fbcfe8;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 0.88rem;
+        }
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.85rem;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頁頭資訊 -->
+    <header class="hero-banner mb-4">
+        <div class="container text-center">
+            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-2 fw-bold">首爾感恩回饋季 • 長榮航空直飛</span>
+            <h1 class="display-6 fw-bold">首爾樂天遊樂園・星空圖書館・彩繪塗鴉秀 4日遊</h1>
+            <p class="lead fs-6 mb-3 opacity-90">台北松山 (TSA) ⇄ 首爾金浦 (GMP) | 團號：OGL111704BR6 | 乙晚國際五星飯店</p>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <span class="badge bg-light text-primary"><i class="bi bi-calendar-check"></i> 出發日期：2026/11/17 (二)</span>
+                <span class="badge bg-light text-primary"><i class="bi bi-calendar2-x"></i> 回程日期：2026/11/20 (五)</span>
+                <span class="badge bg-light text-primary"><i class="bi bi-clock-history"></i> 天數：4 天 3 夜</span>
+                <span class="badge bg-light text-primary"><i class="bi bi-shield-check"></i> 不進人蔘保肝 • 無自費行程</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mb-5">
+
+        <!-- 區塊一：航班與出發時刻情報 -->
+        <section class="mb-5">
+            <h3 class="section-header"><i class="bi bi-airplane-engines me-2"></i>出發時間與航班情報（長榮航空 EVA AIR）</h3>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="flight-card p-4 border-start border-4 border-primary">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-primary px-3 py-2">去程 FLIGHT 1</span>
+                            <span class="fw-bold text-muted">2026/11/17 (二)</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-1">長榮航空 BR156</h4>
+                        <div class="row align-items-center my-3 text-center">
+                            <div class="col-5">
+                                <div class="fs-4 fw-bold text-primary">14:30</div>
+                                <div class="small fw-semibold text-secondary">台北松山 (TSA)</div>
+                            </div>
+                            <div class="col-2 text-muted"><i class="bi bi-arrow-right fs-4"></i></div>
+                            <div class="col-5">
+                                <div class="fs-4 fw-bold text-primary">18:00</div>
+                                <div class="small fw-semibold text-secondary">首爾金浦 (GMP)</div>
+                            </div>
+                        </div>
+                        <div class="small text-muted border-top pt-2">
+                            <i class="bi bi-bag-check me-1"></i>免費託運行李：1件 23kg | 手提行李：1件 7kg
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="flight-card p-4 border-start border-4 border-info">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-info text-dark px-3 py-2">回程 FLIGHT 2</span>
+                            <span class="fw-bold text-muted">2026/11/20 (五)</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-1">長榮航空 BR155</h4>
+                        <div class="row align-items-center my-3 text-center">
+                            <div class="col-5">
+                                <div class="fs-4 fw-bold text-info">13:50</div>
+                                <div class="small fw-semibold text-secondary">首爾金浦 (GMP)</div>
+                            </div>
+                            <div class="col-2 text-muted"><i class="bi bi-arrow-right fs-4"></i></div>
+                            <div class="col-5">
+                                <div class="fs-4 fw-bold text-info">15:35</div>
+                                <div class="small fw-semibold text-secondary">台北松山 (TSA)</div>
+                            </div>
+                        </div>
+                        <div class="small text-muted border-top pt-2">
+                            <i class="bi bi-geo-alt me-1"></i>班機降落台北市中心松山機場，搭乘捷運或接駁返家最迅速
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊二：台北松山機場 停車場日停指南 -->
+        <section class="mb-5">
+            <h3 class="section-header"><i class="bi bi-p-square-fill me-2"></i>台北松山機場 停車場日停攻略</h3>
+            <div class="parking-box">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-7">
+                        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-info-circle-fill text-warning me-2"></i>松山機場站內停車收費標準（P1 / P2 / P3 停車場）</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-clock text-secondary me-2"></i><strong>一般臨停費率：</strong>尖峰 (08:00～21:00) 每小時 <strong>$40元</strong>；離峰 (21:00～翌日08:00) 每小時 <strong>$10元</strong>。</li>
+                            <li class="mb-2"><i class="bi bi-cash-coin text-secondary me-2"></i><strong>單日最高收費上限：</strong>24小時停放累計上限為 <strong>$630元/日</strong>（以實際停放時數計算）。</li>
+                            <li class="mb-2"><i class="bi bi-stars text-danger me-2"></i><strong>★ 出國預約停車特惠（省超大）：</strong>透過松山機場官方停車預約系統，預約第2停車場享每日 <strong>$300～$350元/日</strong>！</li>
+                            <li><i class="bi bi-exclamation-triangle text-secondary me-2"></i><strong>預約規則：</strong>須於出發前 3～12 天上網預約，停放天數最少 3 天、最多 12 天，每日限量 30 名額滿為止。</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="bg-white p-3 rounded-3 border">
+                            <h6 class="fw-bold text-primary mb-2"><i class="bi bi-geo-alt me-1"></i>松山機場周遭替代停車方案：</h6>
+                            <div class="small text-muted mb-2"><strong>Times 24h 普客二四（民權敦化）：</strong>進場24小時最高收費 $300元。</div>
+                            <div class="small text-muted mb-2"><strong>民族東路順康／吉安亭停車場：</strong>單日最高約 $160～$180元（可搭公車或計程車至航廈）。</div>
+                            <div class="small text-muted"><strong>基隆河5號水門堤外停車場：</strong>每日計次約 $30～$50元（適合長天期省錢旅客）。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊三：首爾旅遊全景點手繪總地圖 -->
+        <section class="mb-5">
+            <div class="overview-map-card p-3">
+                <img src="./imgs/首爾4天3夜手繪圖.png" alt="首爾4天3夜景點手繪導覽地圖" class="img-fluid rounded-3" onerror="this.src='https://images.unsplash.com/photo-1538485399081-7191377e8241?w=1200';">
+                <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 pt-2 border-top px-2">
+                    <span class="small text-muted">
+                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                        標示景點涵蓋：漢江水岸・景福宮・德壽宮・明洞・聖水洞・COEX星空圖書館・樂天世界塔等核心熱點
+                    </span>
+                    <a href="https://www.google.com/maps/dir/金浦國際機場/Gimpo+Laveniche+March+Avenue/Starfield+Library+COEX/Seongsu-dong/Lotte+World+Tower/樂天世界/益善洞韓屋村/德壽宮/The+Painters+Gwanghwamun+theater/明洞購物街" target="_blank" class="btn btn-sm btn-outline-primary mt-2 mt-md-0">
+                        <i class="bi bi-arrow-up-right-square me-1"></i>在 Google Maps 開啟全景點路線
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊四：明洞地圖版：吃・景三欄展示 -->
+        <section class="mb-5">
+            <h3 class="section-header"><i class="bi bi-map-fill me-2"></i>明洞地圖版：吃・景三欄推薦</h3>
+            <div class="myeongdong-showcase">
+                <div class="mb-4">
+                    <span class="myeongdong-badge">明洞地圖版</span>
+                    <p class="mb-0 text-secondary">明洞不是只有一條購物街，而是由明洞站、乙支路入口站與周邊巷弄組成的大型商圈。第一次來最容易遇到的問題不是「沒有東西買」，而是店太多、不知道怎麼排。這裡把行程中的餐廳與購物店拆成獨立攻略：先看特色，再決定要吃、要買、要拍照，並可依照晚餐、宵夜、伴手禮與服飾購物自由組合。根據 2026 年明洞攻略資料，明洞商圈的店家營業時間差異很大，夜市攤販通常傍晚後才逐漸熱鬧；若想感受完整的明洞氣氛，建議把自由活動安排在傍晚以後。</p>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="fw-bold text-dark mb-3"><i class="bi bi-cup-hot-fill text-danger me-2"></i>食：明洞必吃 6 家</h4>
+                </div>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/明洞餃子.jpg" alt="明洞餃子" onerror="this.src='https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">必吃推薦</span>
+                                <h5 class="fw-bold text-dark">明洞餃子</h5>
+                                <p class="small text-secondary mb-0">明洞代表性老字號美食。招牌刀削麵以寬扁滑順的麵條搭配肉末、洋蔥與櫛瓜等配料，湯頭帶有濃郁鮮香；桌邊泡菜酸辣開胃，也可以直接加入麵湯一起吃。第一次來明洞，建議把它當成「快速、道地、吃完再繼續逛街」的一站。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/荒謬的生肉.jpg" alt="荒謬的生肉" onerror="this.src='https://images.unsplash.com/photo-1559847844-5315695dadae?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">燒肉推薦</span>
+                                <h5 class="fw-bold text-dark">荒謬的生肉</h5>
+                                <p class="small text-secondary mb-0">主打韓式豬五花吃到飽，除了烤肉，也搭配生菜、泡菜、豆芽、蔥絲、豆腐與大醬湯等配菜，適合多人一起吃、邊烤邊聊天。豬五花建議用生菜包蒜片、泡菜一起入口，油脂與酸辣味可以互相平衡；如果逛街逛到很餓，這家屬於份量感比較強的選擇。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/Myth Jokbal豬腳小姐.jpg" alt="Myth Jokbal豬腳小姐" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">韓式下酒菜</span>
+                                <h5 class="fw-bold text-dark">Myth Jokbal 豬腳小姐</h5>
+                                <p class="small text-secondary mb-0">在地經營多年的豬腳餐廳，招牌是切片豬腳搭配蒜泥、泡菜與各式小菜一起吃。豬腳口感偏Q彈軟嫩，蒜泥口味香氣明顯但不會搶走肉味；份量通常適合多人分享，也很適合排在明洞夜間行程，吃完再繼續逛街或找宵夜。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/BHC炸雞.jpg" alt="BHC炸雞" onerror="this.src='https://images.unsplash.com/photo-1562967916-eb82221dfb92?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">夜晚宵夜</span>
+                                <h5 class="fw-bold text-dark">BHC炸雞</h5>
+                                <p class="small text-secondary mb-0">韓國經典炸雞品牌，明洞逛街到晚上很適合把它安排成「炸雞＋飲料」的休息站。BHC口味選擇多，其中起司粉風味香氣濃郁，醬油風味則比較適合喜歡鹹香口味的人。炸雞份量適合分享，若同行人數較多，可以一次點兩種口味比較有趣。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/本粥.jpg" alt="本粥" onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">清爽選擇</span>
+                                <h5 class="fw-bold text-dark">本粥</h5>
+                                <p class="small text-secondary mb-0">韓國大型粥品連鎖品牌，適合早餐、早午餐或前一晚吃得比較油膩後換個口味。菜單選擇很多，從鮑魚粥、海鮮粥到牛肉與蔬菜類都有，口感溫和、份量也有飽足感。對不太能吃辣或同行有長輩、小朋友的旅客來說，是明洞很方便的備選餐廳。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/百濟蔘雞湯.jpg" alt="百濟蔘雞湯" onerror="this.src='https://images.unsplash.com/photo-1547592180-85f173990554?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">養生熱食</span>
+                                <h5 class="fw-bold text-dark">百濟蔘雞湯</h5>
+                                <p class="small text-secondary mb-0">明洞老字號蔘雞湯餐廳，整隻雞燉煮後填入糯米、紅棗與人蔘，湯汁溫潤、香氣帶有淡淡人蔘味，並常搭配人蔘酒一起享用。適合天氣偏冷、想吃一份完整熱食時安排；如果喜歡濃厚重口味，則要注意它的湯頭走的是較清爽路線。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="fw-bold text-dark mb-3"><i class="bi bi-camera-fill text-primary me-2"></i>購物：明洞必逛 6 家店</h4>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/LINE FRIENDS.jpg" alt="LINE FRIENDS" onerror="this.src='https://images.unsplash.com/photo-1523905330026-b8bd1f5f320b?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">打卡拍照</span>
+                                <h5 class="fw-bold text-dark">LINE FRIENDS</h5>
+                                <p class="small text-secondary mb-0">明洞的人氣角色周邊據點，店面本身就是拍照亮點。除了熊大、兔兔、莎莉等 LINE FRIENDS 角色，也可看到 BT21 等人氣聯名商品，從玩偶、文具、帽子、雨傘到生活雜貨都有。適合喜歡角色商品、想找韓國限定周邊，或只是想拍一組可愛旅行照片的人。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/ARTBOX.jpg" alt="ARTBOX" onerror="this.src='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">文具雜貨</span>
+                                <h5 class="fw-bold text-dark">ARTBOX</h5>
+                                <p class="small text-secondary mb-0">韓國人氣文具與生活雜貨連鎖店，最適合安排在明洞購物路線中「隨逛隨買」。店內從筆記本、貼紙、卡片、筆類到收納、生活小物都有，設計風格可愛又有韓國日常感。單價相對容易入手，很適合一次買多份小禮物回台灣分送同事、朋友。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/MLB.jpg" alt="MLB" onerror="this.src='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">潮流服飾</span>
+                                <h5 class="fw-bold text-dark">MLB</h5>
+                                <p class="small text-secondary mb-0">MLB在韓國市場以街頭休閒與棒球元素穿搭聞名，明洞店很適合一次比較帽款、上衣、外套與包款。最容易入手的是棒球帽與 Logo 單品，尺寸與款式選擇通常也比較完整。若想買具有韓國街頭感、又不會太難搭配的服飾，這一站可以留在購物後半段再決定。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/COVERNAT.jpg" alt="COVERNAT" onerror="this.src='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">流行品牌</span>
+                                <h5 class="fw-bold text-dark">COVERNAT</h5>
+                                <p class="small text-secondary mb-0">韓國代表性的休閒街頭品牌之一，風格偏向寬鬆、日常、復古與校園感。T-shirt、帽T、外套與帽款都很容易融入日常穿搭；明洞逛街時可以特別留意季節限定與聯名款。若同行旅伴喜歡韓系穿搭，這家比單純買紀念品更值得留時間慢慢看。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/M PlayGround.jpg" alt="M PlayGround" onerror="this.src='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">平價韓貨</span>
+                                <h5 class="fw-bold text-dark">M PlayGround</h5>
+                                <p class="small text-secondary mb-0">主打年輕、休閒與相對容易入手的韓系服飾，適合想一次看很多平價款式的旅客。除了上衣、毛衣與外套，也常能找到帽子、圍巾等配件。建議把它安排在明洞主街逛街的中後段，先比較其他品牌價格與版型，再決定要不要下手，購物會更有效率。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="myeongdong-feature-card">
+                            <img src="./imgs/HBAF杏仁果.jpg" alt="HBAF 杏仁果" onerror="this.src='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800';">
+                            <div class="content">
+                                <span class="myeongdong-badge">伴手禮</span>
+                                <h5 class="fw-bold text-dark">HBAF 杏仁果</h5>
+                                <p class="small text-secondary mb-0">韓國人氣杏仁零食品牌，特色是把原味杏仁做成多種鹹甜口味，像蜂蜜奶油、芥末、辣味與海苔等，適合買幾種小包裝回家分送。明洞專賣店的陳列與包裝很有伴手禮氣氛，不過若目標是大量採購，建議同時比較超市與其他通路價格；如果只是想買幾盒特色口味，專賣店則很方便。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="spot-card">
+                                <div class="card-header-custom"><i class="bi bi-clock-history me-2"></i>建議逛街時間</div>
+                                <div class="p-4 small text-secondary">
+                                    <strong>17:00 前：</strong>先逛服飾、美妝與文具店，避開晚上人潮。<br>
+                                    <strong>17:00～20:00：</strong>進入明洞最熱鬧時段，邊吃街頭小吃邊購物。<br>
+                                    <strong>20:00 後：</strong>可安排炸雞、豬腳或宵夜，再慢慢回飯店。
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="spot-card">
+                                <div class="card-header-custom"><i class="bi bi-bag-check-fill me-2"></i>購物怎麼分配</div>
+                                <div class="p-4 small text-secondary">
+                                    <strong>美妝：</strong>Olive Young 優先。<br>
+                                    <strong>角色小物：</strong>LINE FRIENDS。<br>
+                                    <strong>文具雜貨：</strong>ARTBOX。<br>
+                                    <strong>服飾：</strong>MLB、COVERNAT、M PlayGround。<br>
+                                    <strong>零食：</strong>HBAF 可先試口味，再比較超市價格。
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="spot-card">
+                                <div class="card-header-custom"><i class="bi bi-exclamation-triangle-fill me-2"></i>明洞逛街提醒</div>
+                                <div class="p-4 small text-secondary">
+                                    路邊攤看到明顯低於市場價格的潮牌商品時，建議不要直接購買；品牌服飾以官方店為主。夜市想吃熱食可觀察排隊人潮，並注意明洞街區垃圾桶較少，吃完可直接詢問攤商如何處理。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊四：DAY 1～DAY 4 每日詳細行程（CELL/ROW 與專屬嵌入圖） -->
+        <section class="mb-5">
+            <h3 class="section-header"><i class="bi bi-calendar3-week me-2"></i>每日詳細行程 (Day 1 - Day 4)</h3>
+
+            <!-- DAY 1 ROW -->
+            <div class="day-row p-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-7">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="day-badge">DAY 1</span>
+                                <h4 class="fw-bold mb-0">松山機場 ✈ 金浦機場 ➔ 金光水路夜色巡禮</h4>
+                            </div>
+                            <span class="weather-pill"><i class="bi bi-cloud-sun"></i> 氣溫：6°C～14°C | 晴時多雲</span>
+                        </div>
+                        <p class="text-secondary mb-3">下午搭乘長榮豪華班機直飛首爾金浦機場。辦理入境通關後專車前往漢江新都市的<strong>金光水路</strong>，漫步於素有「韓國小威尼斯」美稱的人工水岸商街，欣賞韓劇《愛麗絲 Alice》取景的水道與璀璨夜間燈光秀。</p>
+                        
+                        <div class="bg-light p-3 rounded-3 mb-3 border">
+                            <div class="row g-2 small">
+                                <div class="col-sm-6"><strong><i class="bi bi-cup-hot text-danger me-1"></i>今日餐食：</strong><br>午餐：機上簡餐<br>晚餐：韓式手工豆腐+水煮肉+綠豆煎餅+季節小菜</div>
+                                <div class="col-sm-6"><strong><i class="bi bi-building text-primary me-1"></i>今日住宿：</strong><br>仁川 HOTEL SOPRA / WANTED / ROYAL EMPORIUM 或 龍仁 THE TRINY HOTEL 或同級</div>
+                            </div>
+                        </div>
+                        <div class="text-muted small"><i class="bi bi-lightbulb text-warning me-1"></i><strong>穿著建議：</strong>11月中旬入夜後河畔氣溫偏低，前往水岸散步請備妥防風保暖外套與薄圍巾。</div>
+                    </div>
+
+                    <!-- DAY 1 圖片空間 CELL -->
+                    <div class="col-lg-5">
+                        <div class="img-wrapper-cell">
+                            <img src="./imgs/金光水路.jpg" alt="金光水路璀璨夜景" onerror="this.src='https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800';">
+                        </div>
+                        <div class="img-caption">【金光水路】水岸璀璨燈光倒影與歐風浪漫步道</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY 2 ROW -->
+            <div class="day-row p-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-7">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="day-badge">DAY 2</span>
+                                <h4 class="fw-bold mb-0">COEX星空圖書館 ➔ 聖水洞散策 ➔ 樂天世界塔 ➔ 樂天世界</h4>
+                            </div>
+                            <span class="weather-pill"><i class="bi bi-sun"></i> 氣溫：4°C～13°C | 晴朗微涼</span>
+                        </div>
+                        <p class="text-secondary mb-3">早晨前往江南 COEX 拍下 13 米高巨型書牆的<strong>星空圖書館</strong>；接續探訪首爾潮流心臟<strong>聖水洞</strong>的紅磚工廠與限定快閃店；午後於石村湖畔仰望<strong>樂天世界塔（外觀）</strong>，並在世界最大室內外的<strong>樂天世界主題樂園</strong>暢玩經典遊樂設施約 3～4 小時！</p>
+                        
+                        <div class="bg-light p-3 rounded-3 mb-3 border">
+                            <div class="row g-2 small">
+                                <div class="col-sm-6"><strong><i class="bi bi-cup-hot text-danger me-1"></i>今日餐食：</strong><br>早餐：飯店早餐<br>午餐：樂園發放餐費 5,000 韓元<br>晚餐：《明倫進士排骨》韓式烤肉吃到飽</div>
+                                <div class="col-sm-6"><strong><i class="bi bi-building text-primary me-1"></i>今日住宿：</strong><br>仁川 HOTEL SOPRA / WANTED 或 龍仁 THE TRINY HOTEL 或同級</div>
+                            </div>
+                        </div>
+                        <div class="text-muted small"><i class="bi bi-lightbulb text-warning me-1"></i><strong>攻略提醒：</strong>樂天世界遊樂園排隊人潮多，建議入場後先抽「預約乘坐券」或善用單人走道加快體驗。</div>
+                    </div>
+
+                    <!-- DAY 2 圖片空間 CELL -->
+                    <div class="col-lg-5">
+                        <div class="img-wrapper-cell">
+                            <img src="./imgs/星空圖書館.jpg" alt="COEX 星空圖書館巨型書牆" onerror="this.src='https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800';">
+                        </div>
+                        <div class="img-caption">【COEX 星空圖書館】13公尺高震撼挑高書架幾何美學</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY 3 ROW -->
+            <div class="day-row p-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-7">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="day-badge">DAY 3</span>
+                                <h4 class="fw-bold mb-0">彩妝坊 ➔ 益善洞韓屋村 ➔ 德壽宮 ➔ 新塗鴉秀 ➔ 明洞鬧區</h4>
+                            </div>
+                            <span class="weather-pill"><i class="bi bi-cloud-sun"></i> 氣溫：3°C～11°C | 乾爽舒適</span>
+                        </div>
+                        <p class="text-secondary mb-3">參觀彩妝坊領取專屬見面禮；漫步 1920 年代古意盎然的<strong>益善洞韓屋村</strong>文青小巷；參訪兼具朝鮮古殿與西洋石造殿宇的<strong>德壽宮</strong>；午後欣賞震撼視覺的<strong>新塗鴉秀</strong>動態藝術表演，晚間在全首爾最繁華的<strong>明洞鬧區</strong>盡情品嚐街頭小吃與採購！</p>
+                        
+                        <div class="bg-light p-3 rounded-3 mb-3 border">
+                            <div class="row g-2 small">
+                                <div class="col-sm-6"><strong><i class="bi bi-cup-hot text-danger me-1"></i>今日餐食：</strong><br>早餐：飯店早餐<br>午餐：正宗馬鈴薯豬骨湯<br>晚餐：明洞自由品嚐（發放餐費 5,000 韓元）</div>
+                                <div class="col-sm-6"><strong><i class="bi bi-building text-primary me-1"></i>今日住宿：</strong><br><span class="badge bg-warning text-dark me-1">五星級</span><strong>Sono Calm Goyang 五星酒店</strong>（或同級）</div>
+                            </div>
+                        </div>
+                        <div class="text-muted small"><i class="bi bi-lightbulb text-warning me-1"></i><strong>住宿亮點：</strong>今晚入住京畿道北部唯一頂級五星奢華度假飯店 Sono Calm Goyang，享受高級客房品質。</div>
+                    </div>
+
+                    <!-- DAY 3 圖片空間 CELL -->
+                    <div class="col-lg-5">
+                        <div class="img-wrapper-cell">
+                            <img src="./imgs/韓屋村.jpg" alt="益善洞韓屋村傳統街景" onerror="this.src='https://images.unsplash.com/photo-1538485399081-7191377e8241?w=800';">
+                        </div>
+                        <div class="img-caption">【益善洞韓屋村】傳統與潮流交織的文青巷弄</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY 4 ROW -->
+            <div class="day-row p-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-7">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="day-badge">DAY 4</span>
+                                <h4 class="fw-bold mb-0">韓國超市伴手禮採購 ➔ 金浦機場 ✈ 台北松山</h4>
+                            </div>
+                            <span class="weather-pill"><i class="bi bi-sun"></i> 氣溫：2°C～10°C | 晴時微冷</span>
+                        </div>
+                        <p class="text-secondary mb-3">飯店早餐後前往當地大型超市展開伴手禮最後衝刺，泡麵、海苔酥、特色零食一次買足。專車抵達金浦國際機場辦理退稅登機，搭乘長榮客機飛返台北松山機場，滿載美好回憶返抵家門。</p>
+                        
+                        <div class="bg-light p-3 rounded-3 mb-3 border">
+                            <div class="row g-2 small">
+                                <div class="col-sm-6"><strong><i class="bi bi-cup-hot text-danger me-1"></i>今日餐食：</strong><br>早餐：飯店早餐<br>午餐：機上簡食<br>晚餐：溫暖的家</div>
+                                <div class="col-sm-6"><strong><i class="bi bi-house-heart text-primary me-1"></i>今日住宿：</strong><br>溫暖的家</div>
+                            </div>
+                        </div>
+                        <div class="text-muted small"><i class="bi bi-lightbulb text-warning me-1"></i><strong>搭機叮嚀：</strong>回程班機起飛時間為 13:50，超市採購請留意行李限重 (23kg)，易碎或體積大的海苔可改手提。</div>
+                    </div>
+
+                    <!-- DAY 4 圖片空間 CELL -->
+                    <div class="col-lg-5">
+                        <div class="img-wrapper-cell">
+                            <img src="./imgs/超市購物.jpg" alt="韓國超市伴手禮採購" onerror="this.src='https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8?w=800';">
+                        </div>
+                        <div class="img-caption">【韓國在地超市】人氣 HBAF 杏仁果、零食海苔伴手禮</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊五：住宿飯店詳細資料（含電話、地址、Google地圖） -->
+        <section class="mb-5">
+            <h3 class="section-header"><i class="bi bi-buildings me-2"></i>預定住宿飯店資料庫 (含地址、電話、Google 地圖導航)</h3>
+            
+            <div class="row g-4">
+                <!-- 飯店 1: Sono Calm Goyang (五星) -->
+                <div class="col-12">
+                    <div class="hotel-card border-top border-4 border-primary">
+                        <img src="./imgs/飯店圖.jpeg" alt="Sono Calm Goyang 五星酒店外觀" class="img-fluid rounded-3 mb-3" onerror="this.src='https://images.unsplash.com/photo-1538485399081-7191377e8241?w=1200';">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="hotel-card p-4 border-top border-4 border-warning">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold text-dark mb-0">Sono Calm Goyang (소노캄 고양)</h5>
+                            <span class="badge bg-warning text-dark"><i class="bi bi-star-fill me-1"></i>第三晚五星指定</span>
+                        </div>
+                        <p class="text-muted small mb-2">京畿道北部首屈一指的國際五星奢華度假飯店，客房寬敞明亮，休閒設施完善。</p>
+                        <div class="small mb-1"><i class="bi bi-geo-alt-fill text-danger me-1"></i><strong>地址：</strong>京畿道高陽市一山東區泰極路20 (20, Taegeuk-ro, Ilsandong-gu, Goyang-si, Gyeonggi-do)</div>
+                        <div class="small mb-3"><i class="bi bi-telephone-fill text-success me-1"></i><strong>電話：</strong>+82-31-925-5600</div>
+                        <a href="https://maps.google.com/?q=Sono+Calm+Goyang" target="_blank" class="btn btn-sm btn-outline-primary w-100">
+                            <i class="bi bi-map me-1"></i>開啟 Google 地圖定位導航
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 飯店 2: Hotel Sopra Cheongna -->
+                <div class="col-md-6">
+                    <div class="hotel-card p-4 border-top border-4 border-primary">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold text-dark mb-0">仁川 HOTEL SOPRA (호텔 소프라)</h5>
+                            <span class="badge bg-secondary">前二晚候選飯店</span>
+                        </div>
+                        <p class="text-muted small mb-2">座落仁川西區青羅周邊，現代簡約商務風格，提供舒適典雅的客房住宿體驗。</p>
+                        <div class="small mb-1"><i class="bi bi-geo-alt-fill text-danger me-1"></i><strong>地址：</strong>仁川廣域市西區西串路301號街21 (21, Seogot-ro 301beon-gil, Seo-gu, Incheon)</div>
+                        <div class="small mb-3"><i class="bi bi-telephone-fill text-success me-1"></i><strong>電話：</strong>+82-32-568-8700</div>
+                        <a href="https://maps.google.com/?q=Hotel+Sopra+Cheongna" target="_blank" class="btn btn-sm btn-outline-primary w-100">
+                            <i class="bi bi-map me-1"></i>開啟 Google 地圖定位導航
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 飯店 3: Hotel Wanted Incheon -->
+                <div class="col-md-6">
+                    <div class="hotel-card p-4 border-top border-4 border-primary">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold text-dark mb-0">仁川 HOTEL WANTED (호텔 원티드)</h5>
+                            <span class="badge bg-secondary">前二晚候選飯店</span>
+                        </div>
+                        <p class="text-muted small mb-2">位於仁川北港新興商務區，現代精品設計感，房間寬敞配備獨立浴缸與先進衛浴。</p>
+                        <div class="small mb-1"><i class="bi bi-geo-alt-fill text-danger me-1"></i><strong>地址：</strong>仁川廣域市西區北港路32號街20 (20, Bukhang-ro 32beon-gil, Seo-gu, Incheon)</div>
+                        <div class="small mb-3"><i class="bi bi-telephone-fill text-success me-1"></i><strong>電話：</strong>+82-32-585-8900</div>
+                        <a href="https://maps.google.com/?q=Hotel+Wanted+Incheon" target="_blank" class="btn btn-sm btn-outline-primary w-100">
+                            <i class="bi bi-map me-1"></i>開啟 Google 地圖定位導航
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 飯店 4: Incheon Royal Emporium Hotel -->
+                <div class="col-md-6">
+                    <div class="hotel-card p-4 border-top border-4 border-primary">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold text-dark mb-0">仁川皇家恩波留姆飯店 (Royal Emporium)</h5>
+                            <span class="badge bg-secondary">前二晚候選飯店</span>
+                        </div>
+                        <p class="text-muted small mb-2">位於仁川永宗島月尾島海邊旁，海景視野優美，步行即可感受海岸度假風情。</p>
+                        <div class="small mb-1"><i class="bi bi-geo-alt-fill text-danger me-1"></i><strong>地址：</strong>仁川廣域市中區銀河水路35 (35, Eunhasu-ro, Jung-gu, Incheon)</div>
+                        <div class="small mb-3"><i class="bi bi-telephone-fill text-success me-1"></i><strong>電話：</strong>+82-32-752-5996</div>
+                        <a href="https://maps.google.com/?q=Incheon+Royal+Emporium+Hotel" target="_blank" class="btn btn-sm btn-outline-primary w-100">
+                            <i class="bi bi-map me-1"></i>開啟 Google 地圖定位導航
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 飯店 5: The Triny Hotel Yongin -->
+                <div class="col-12">
+                    <div class="hotel-card p-4 border-top border-4 border-primary">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold text-dark mb-0">龍仁 THE TRINY HOTEL (더트리니 어반스위트)</h5>
+                            <span class="badge bg-secondary">前二晚候選飯店</span>
+                        </div>
+                        <p class="text-muted small mb-2">座落京畿道龍仁市中心，屬於大空間公寓式精品套房飯店，周邊生活機能與餐飲極佳。</p>
+                        <div class="small mb-1"><i class="bi bi-geo-alt-fill text-danger me-1"></i><strong>地址：</strong>京畿道龍仁市處仁區中部大路1218 (1218, Jungbu-daero, Cheoin-gu, Yongin-si, Gyeonggi-do)</div>
+                        <div class="small mb-3"><i class="bi bi-telephone-fill text-success me-1"></i><strong>電話：</strong>+82-31-338-0000</div>
+                        <a href="https://maps.google.com/?q=The+Triny+Hotel+Yongin" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-map me-1"></i>開啟 Google 地圖定位導航
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 區塊六：所有景點深度介紹、彩妝坊推薦購物、超市推薦商品 -->
+        <section class="mb-5">
+            <h3 class="section-header"><i class="bi bi-compass-fill me-2"></i>全景點深度介紹與購物特輯指南</h3>
+            
+            <div class="row g-4">
+                <!-- 景點 1: 金光水路 -->
+                <div class="col-md-6">
+                    <div class="spot-card">
+                        <img src="./imgs/金光水路地圖.jpeg" alt="金光水路" class="img-fluid" onerror="this.src='https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800';">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-water me-2"></i>金光水路 (Geomdan / Gimpo Laveniche)</span>
+                            <span class="badge bg-primary">韓劇取景地</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="small text-secondary mb-2"><strong>景點介紹：</strong>金浦漢江新都市的核心人工運河，長達 2.68 公里，被譽為「韓國小威尼斯」[cite: 4]。兩側林立歐風商業街、咖啡座與特色美食餐館。夜間水道兩旁的噴泉、霓虹造景與圓形月亮船相互輝映，是韓劇《愛麗絲 Alice》、《歡迎來到王之國》等多部作品的浪漫拍攝舞台[cite: 4]。</p>
+                            <div class="small text-muted"><i class="bi bi-camera me-1"></i><strong>拍照推薦：</strong>拱橋夜景倒影、河道水岸步道、彩色水上月亮船[cite: 4]。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點 2: COEX 星空圖書館 -->
+                <div class="col-md-6">
+                    <div class="spot-card">
+                        <img src="./imgs/星空圖書館.jpg" alt="COEX 星空圖書館" class="img-fluid" onerror="this.src='https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800';">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-book-half me-2"></i>COEX 星空圖書館 (Starfield Library)</span>
+                            <span class="badge bg-primary">江南美學地標</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="small text-secondary mb-2"><strong>景點介紹：</strong>位於江南 Starfield COEX Mall 地下商場中心，佔地達 2,800 平方公尺[cite: 4, 11]。以 3 座高達 13 公尺的壯麗挑高書架為核心，收藏逾 5 萬冊書籍雜誌[cite: 4]。透過天花板網格天窗灑落的自然採光，融合幾何建築線條，是首爾最具代表性的室內視覺盛宴[cite: 4]。</p>
+                            <div class="small text-muted"><i class="bi bi-camera me-1"></i><strong>拍照技巧：</strong>站在手扶梯由下往上以超廣角仰拍，能捕捉壯闊書牆的全貌[cite: 5]。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點 3: 聖水洞 -->
+                <div class="col-md-6">
+                    <div class="spot-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-shop me-2"></i>聖水洞散策 (Seongsu-dong)</span>
+                            <span class="badge bg-primary">首爾蘇活文青區</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="small text-secondary mb-2">
+                                <strong>景點介紹：</strong>過去為製鞋業老工廠與皮革倉庫，近年由新銳設計師與文創品牌翻新，蛻變為首爾潮流新核心[cite: 4, 5]。紅磚工業風建築融入各大國際精品快閃店（Pop-up Store）、潮流服飾旗艦店（如 ADER ERROR、Tamburins、Dior）與特色咖啡廳[cite: 4, 5]。
+                            </p>
+                            <div class="small text-muted mb-3">
+                                <i class="bi bi-cup-hot me-1"></i><strong>遊覽訣竅：</strong>建議採「外帶咖啡步調」，邊散步邊欣賞街頭快閃店外觀與隨興街拍。
+                            </div>
+
+                            <!-- 聖水洞熱門店家清單 TABLE -->
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered align-middle mb-0 text-start" style="font-size: 0.8rem;">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 22%;">分類</th>
+                                            <th style="width: 38%;">店家名稱</th>
+                                            <th>亮點與特色必買/必吃</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span class="badge bg-danger bg-opacity-10 text-danger">國際地標</span></td>
+                                            <td><strong>Dior Seongsu</strong><br><span class="text-muted">概念旗艦店</span></td>
+                                            <td>經典蒙田大道風格玻璃宮殿外觀，聖水洞必拍地標。</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="4"><span class="badge bg-primary bg-opacity-10 text-primary">潮牌/美妝</span></td>
+                                            <td><strong>TAMBURINS 聖水</strong></td>
+                                            <td>Jennie 代言香氛、護手霜與固體香膏，店內大型雕塑藝廊感十足。</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Matin Kim 旗艦店</strong></td>
+                                            <td>韓國大勢女團愛用品牌，招牌金屬鐵牌皮夾、水洗單寧與街頭服飾。</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>STAND OIL / emis</strong></td>
+                                            <td>STAND OIL 人氣平價腋下包/托特包；emis 必搶版型修飾臉型棒球帽。</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Olive Young N 聖水</strong></td>
+                                            <td>2024全新開幕5層樓全韓最大旗艦店，品項最齊全且支援個人色彩診斷。</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="2"><span class="badge bg-warning bg-opacity-10 text-warning text-dark">排隊美食</span></td>
+                                            <td><strong>祖傳三代馬鈴薯排骨湯</strong></td>
+                                            <td>24小時營業老字號名店，排骨燉得軟嫩多汁，最後必加點炒飯或泡麵。</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>自然島鹽麵包 / BETON</strong></td>
+                                            <td>外皮酥脆底層焦香的超人氣出爐鹽可頌，適合外帶邊走邊吃。</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="2"><span class="badge bg-success bg-opacity-10 text-success">特色咖啡</span></td>
+                                            <td><strong>Cafe Onion 聖水店</strong></td>
+                                            <td>老舊工廠廢墟風始祖，開闊頂樓天台，招牌雪山麵包 (Pandoro)。</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>大林倉庫 / NUDAKE</strong></td>
+                                            <td>大林倉庫紅磚藝術藝廊展覽；NUDAKE（GM旗下）如藝術品般的前衛甜點。</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /TABLE 結束 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- 景點 5: 樂天世界 -->
+                <div class="col-md-6">
+                    <div class="spot-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-ticket-perforated-fill me-2"></i>樂天世界主題樂園 (門票+自由券)</span>
+                            <span class="badge bg-primary">雙主題樂園</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="small text-secondary mb-2">
+                                <strong>景點介紹：</strong>榮獲金氏世界紀錄認證為「世界最大室內主題樂園」，包含室內「探險世界」與戶外石村湖上的「魔術島」[cite: 4, 8]。擁有超過 30 種尖端設施（如法國大革命過山車、激流勇進、亞特蘭蒂斯、旋轉木馬），全天候不受晴雨天候影響[cite: 4, 8]。
+                            </p>
+                            <div class="small text-muted mb-3">
+                                <i class="bi bi-trophy me-1"></i><strong>必拍打卡：</strong>戶外魔幻城堡合影、室內巨型氣球飛行、經典旋轉木馬[cite: 4, 8]。
+                            </div>
+
+                            <!-- 樂天世界遊樂攻略與拍照位子 TABLE -->
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered align-middle mb-0 text-start" style="font-size: 0.8rem;">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 22%;">項目分類</th>
+                                            <th style="width: 36%;">設施 / 體驗名稱</th>
+                                            <th>遊樂方式、特色與拍照訣竅</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td rowspan="2"><span class="badge bg-danger bg-opacity-10 text-danger">戶外魔幻島</span></td>
+                                            <td><strong>亞特蘭提斯 (Atlantis)</strong><br><span class="text-muted">72度高速衝刺雲霄飛車</span></td>
+                                            <td>全園最夯！結合急流泛舟與雲霄飛車，72度極速俯衝且不濺濕，建議開園第一時間衝或善用快速通關。</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>特快彗星號 / 自由落體</strong></td>
+                                            <td>彗星號在全黑宇宙中360度旋轉；自由落體則在近70公尺高空旋轉俯瞰全景後瞬間下墜。</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="2"><span class="badge bg-primary bg-opacity-10 text-primary">室內探險世界</span></td>
+                                            <td><strong>法國大革命 (過山車)</strong><br><span class="badge bg-warning text-dark" style="font-size: 0.7rem;">搭乘預約制 / 單人道</span></td>
+                                            <td>在室內建築梁柱穿梭的垂直與水平大迴旋，入場後需優先抽預約單或走「單人通道（Single Rider）」加速排隊。</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>激流勇進 / 氣球飛行</strong></td>
+                                            <td>激流勇進為室內火山歷險；氣球飛行於6層樓高空俯瞰全園，夜間燈光亮起最浪漫[cite: 1]。</td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="2"><span class="badge bg-success bg-opacity-10 text-success">經典拍照位</span></td>
+                                            <td><strong>魔幻城堡 (Magic Castle)</strong><br><span class="text-muted">戶外拱橋 / 湖畔長椅</span></td>
+                                            <td>正面拱橋拍全景；晚間 20:40 上演 3D 燈光投影秀[cite: 1]，打光倒映在石村湖面效果最夢幻。</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>旋轉木馬 (Camelot Carousel)</strong><br><span class="text-muted">室內 1F 拍照專區</span></td>
+                                            <td>經典韓劇浪漫取景地[cite: 5]，站在木馬正面中央以暖光為背景，抓拍童話感個人照或情侶照。</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="badge bg-info bg-opacity-10 text-info text-dark">韓妞體驗</span></td>
+                                            <td><strong>韓式高中校服租借</strong><br><span class="text-muted">梨花校服 / 蠶室感性校服</span></td>
+                                            <td>韓國年輕人熱門玩法，換上精緻百褶裙、西裝制服在城堡和木馬前街拍，彷彿置身韓劇場景[cite: 1]。</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /TABLE 結束 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- 景點 4: 樂天世界塔 -->
+                <div class="col-md-6">
+                    <div class="spot-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-building me-2"></i>SEOUL SKY 樂天世界塔 (外觀)</span>
+                            <span class="badge bg-primary">韓國第一高樓</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="small text-secondary mb-2"><strong>景點介紹：</strong>樓高 123 層、總高 555 公尺，名列世界高塔建築前茅[cite: 4, 5]。流線型造型融合韓國傳統瓷器與毛筆曲線美學，亦為電影《與神同行》取景地[cite: 4, 5]。本行程安排於石村湖畔仰望拍照，感受其直聳入雲的雄偉氣魄[cite: 5]。</p>
+                            <div class="small text-muted"><i class="bi bi-camera me-1"></i><strong>重要叮嚀：</strong>本團安排為石村湖畔外觀拍照，非登上觀景台，請勿混淆[cite: 5]。</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- 景點 6: 益善洞韓屋村 -->
+                <div class="col-md-6">
+                    <div class="spot-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-house-door-fill me-2"></i>益善洞韓屋村 (Ikseon-dong)</span>
+                            <span class="badge bg-primary">百年平民韓屋</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="small text-secondary mb-2"><strong>景點介紹：</strong>建於 1920 年代，是首爾最具歷史代表性的平民集合型韓屋區[cite: 4, 5]。在僅 801 公尺蜿蜒曲折的小巷裡，低矮傳統黑瓦屋頂下改裝成獨特香氛店、古著選品店、文青茶室與排隊名店（如手撕蒸氣吐司 Mil Toast），處處洋溢典雅又前衛的新復古氛圍[cite: 5, 8, 12]。</p>
+                            <div class="small text-muted"><i class="bi bi-cup-straw me-1"></i><strong>排隊名店：</strong>蒸氣手撕吐司、花草韓屋茶坊、手作復古飾品選品[cite: 8, 12]。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點 7: 德壽宮 -->
+                <div class="col-md-6">
+                    <div class="spot-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-bank2 me-2"></i>德壽宮 (Deoksugung)</span>
+                            <span class="badge bg-primary">大韓帝國皇宮</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="small text-secondary mb-2"><strong>景點介紹：</strong>首爾五大宮殿之一，是大韓帝國（1897）高宗皇帝實施近代化新政的核心舞台。它是首爾唯一同時座落傳統朝鮮木造殿宇（中和殿）與西洋新古典主義石造殿宇（石造殿）的王宮[cite: 5]。宮門外的「德壽宮石牆路」更是韓國最著名的漫步約會名所。</p>
+                            <div class="small text-muted"><i class="bi bi-info-circle me-1"></i><strong>替代叮嚀：</strong>若遇週一休館或特殊公休日，行程將依約以《景福宮》替代。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點 8: 新塗鴉秀 -->
+                <div class="col-md-6">
+                    <div class="spot-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-palette-fill me-2"></i>新塗鴉秀 (The Painters)</span>
+                            <span class="badge bg-primary">非語言動態大秀</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="small text-secondary mb-2"><strong>演出亮點：</strong>跳脫靜態美術館框架！結合現場動態素描、沙畫、夜光炫彩畫與 3D 立體投影互動，四位身手矯健的演員以默劇幽默與超凡畫技，在節奏明快的音樂下現場重現李小龍、梵谷等世界名畫，無語言隔閡，各年齡層皆能盡情沈浸其中[cite: 4, 5]。</p>
+                            <div class="small text-muted"><i class="bi bi-info-circle me-1"></i><strong>替代叮嚀：</strong>若遇客滿或休館，將以知名的亂打秀 (NANTA) 或 JUMP 替代[cite: 5]。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點 9: 明洞鬧區 -->
+                <div class="col-md-6">
+                    <div class="spot-card">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-bag-heart-fill me-2"></i>明洞鬧區 (Myeongdong)</span>
+                            <span class="badge bg-primary">購物美食一級戰區</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="small text-secondary mb-2"><strong>商圈亮點：</strong>首爾流行時尚的旗艦心臟地帶！匯聚全首爾規模最大的 Olive Young 旗艦店、各大韓潮服飾與美妝店[cite: 5, 10]。發放 5,000 韓元餐費自由覓食[cite: 4, 5]，傍晚起更湧現豐富街頭攤販：香濃雞蛋糕、起司年糕串、辣炒年糕、黑糖餅、旋風馬鈴薯與明洞刀削麵，滿足所有味蕾！</p>
+                            <div class="small text-muted"><i class="bi bi-shop me-1"></i><strong>必逛推薦：</strong>Olive Young 明洞 Town 旗艦店（美妝藥妝全首爾最齊全）[cite: 5, 10]。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點 10: 彩妝坊推薦購物 (滿版 12 欄，內部左右各 col-md-6 排版) -->
+                <div class="col-6">
+                    <div class="spot-card border-warning">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center bg-warning bg-opacity-10 text-dark">
+                            <span><i class="bi bi-heart-pulse-fill text-danger me-2"></i>精緻美膚彩妝坊 • 必買推薦清單</span>
+                            <span class="badge bg-danger">參團贈見面禮</span>
+                        </div>
+                        <div class="p-4">
+                            <div class="row g-4 align-items-center">
+                                <!-- 左側欄位 col-md-6 -->
+                                <div class="col-md-6">
+                                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-info-circle me-1 text-primary"></i>購物站說明與選購指引</h6>
+                                    <p class="small text-secondary mb-2">此為團體行程安排之專屬購物參觀站，參團貴賓每人可獲贈精美見面禮乙份[cite: 5, 12]。現場主要展示韓國專利高科技保養研發品項。</p>
+                                    <p class="small text-secondary mb-0">建議抱持理性消費原則，優先檢視產品成分、規格、效期，並評估是否適合個人膚質，挑選真正需要的明星保養品即可[cite: 12]。</p>
+                                </div>
+                                <!-- 右側欄位 col-md-6 -->
+                                <div class="col-md-6">
+                                    <div class="shop-box">
+                                        <h6 class="fw-bold text-danger mb-2"><i class="bi bi-stars me-1"></i>熱門推薦護膚保養品項</h6>
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1"></i><strong>肉毒胜肽緊緻安瓶精華：</strong>高濃度胜肽抗痕撫紋、極致深層保濕。</li>
+                                            <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1"></i><strong>蝸牛黏液修護面膜/面霜：</strong>秋冬乾燥肌膚的深層修護鎖水救星。</li>
+                                            <li class="mb-1"><i class="bi bi-check-circle-fill text-success me-1"></i><strong>智慧校色 CC 霜 & 水光氣墊：</strong>清爽不泛白、透亮韓系裸妝必備。</li>
+                                            <li><i class="bi bi-check-circle-fill text-success me-1"></i><strong>酵素去角質凝膠 & 泡泡潔顏面膜：</strong>溫和代謝老廢角質，洗出水嫩透亮肌。</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁尾版權 -->
+    <footer class="bg-dark text-white text-center py-4">
+        <div class="container">
+            <p class="mb-1 fw-bold">首爾感恩回饋季四日遊 • 旅遊情報手冊</p>
+            <p class="small text-muted mb-0">行程代碼：OGL111704BR6 | 明洞店家文案參考 2026 年公開旅遊資訊整理；實際營業時間、店舖位置與商品供應仍以店家現場公告為準</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
